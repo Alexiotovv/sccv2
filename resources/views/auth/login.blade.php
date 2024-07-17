@@ -47,6 +47,23 @@
     </div>
   </div>
   <!-- [ Pre-loader ] End -->
+  
+  
+@if(session()->has('mensaje'))
+  <div class="col-sm-4">
+      <div class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">
+          <div class="d-flex align-items-center">
+              <div class="font-35 text-success"><i class='bx bxs-check-circle'></i>
+              </div>
+              <div class="ms-3">
+                  <h6 class="mb-0 text-success">Mensaje</h6>
+                  <div>{{Session::get('mensaje')}}</div>
+              </div>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  </div>
+@endif
 
   <div class="auth-main v1">
     <div class="auth-wrapper">
@@ -58,7 +75,7 @@
               {{-- <h4 class="f-w-500 mb-1">Login with your email</h4>
               <p class="mb-3">Don't have an Account? <a href="register-v1.html" class="link-primary ms-1">Create Account</a></p> --}}
             </div>
-            <form>@csrf
+            <form action="{{route('login')}}" method="POST">@csrf
                 <div class="mb-3">
                 <input type="email" class="form-control" name="email" id="email" placeholder="Correo" value="alex@gmail.com">
                 </div>
@@ -73,7 +90,7 @@
                 {{-- <a href="forgot-password-v1.html"><h6 class="f-w-400 mb-0">Forgot Password?</h6></a> --}}
                 </div>
                 <div class="d-grid mt-4">
-                <button type="button" class="btn btn-primary" onclick="Ingresar()">Ingresar</button>
+                <button type="submit" class="btn btn-primary">Ingresar</button>
                 </div>
             </form>
             
@@ -109,28 +126,7 @@
   <script src="../../../assets/js/plugins/feather.min.js"></script>
   <script src="{{asset('assets/js/jquery-3.7.1.min.js')}}"></script>
   <script>
-    function Ingresar() {
-        let email = $("#email").val();
-        let password = $("#password").val();
-        //let _token=$("input[name='_token']")
-        
-        $.ajax({
-            type: "POST",
-            url: "/login",
-            data: {
-                email:email,
-                password:password,
-                _token:"{{csrf_token()}}"
-            },
-            dataType: "json",
-            success: function (response) {
-              console.log("entro")
-              window.location.href = "/home";
-                
-            }
-        });
-    }
-  </script>
+
   
   <script>preset_change("preset-1");</script>
    <div class="offcanvas border-0 pct-offcanvas offcanvas-end" tabindex="-1" id="offcanvas_pc_layout">

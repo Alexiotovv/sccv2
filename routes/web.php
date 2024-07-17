@@ -33,8 +33,54 @@ Route::get('/',function(){
 Route::middleware('auth:api')->get('/check-auth', [App\Http\Controllers\AuthController::class, 'checkAuth']);
 
 //Home
-Route::middleware('jwt.auth')->get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->middleware(['auth'])->name('home');
 
 //Register and Login user
 Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::middleware('jwt.auth')->get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+//Usuarios
+Route::get('/users', [UserController::class,'users'])->middleware(['auth'])->name('users');
+Route::get('/users/edit/{id}', [UserController::class,'edit'])->middleware(['auth'])->name('usuario.edit');
+Route::get('/users/create', [UserController::class,'create'])->middleware(['auth'])->name('usuario.create');
+Route::post('/users/update', [UserController::class,'update'])->middleware(['auth'])->name('usuario.update');
+Route::post('/users/changepassword', [UserController::class,'changepassword'])->middleware(['auth'])->name('change.password');
+
+Route::post('/profile', function () { return auth()->user(); });
+Route::patch('/change_status/user/{id_user}', [UserController::class,'change_status']);
+Route::post('/register', [UserController::class,'register'])->name('register');
+
+//Ejecutados
+Route::get('/ejecutado/create', [DeudoresController::class,'create'])->middleware(['auth'])->name('create.ejecutado');
+Route::get('/ejecutado/index', [DeudoresController::class,'index'])->middleware(['auth'])->name('index.ejecutado');
+Route::post('/ejecutado/store', [DeudoresController::class,'store'])->middleware(['auth'])->name('store.ejecutado');
+Route::get('/ejecutado/edit/{id}', [DeudoresController::class,'edit'])->middleware(['auth'])->name('edit.ejecutado');
+Route::post('/ejecutado/update', [DeudoresController::class,'update'])->middleware(['auth'])->name('update.ejecutado');
+Route::post('/ejecutado/destroy', [DeudoresController::class,'destroy'])->middleware(['auth'])->name('destroy.ejecutado');
+Route::get('/ejecutado/show/{doc}', [DeudoresController::class,'show'])->middleware(['auth'])->name('show.ejecutado');
+
+//Expedientes
+Route::get('/expedientes/index/', [ExpedientesController::class,'index'])->middleware(['auth'])->name('index.expedientes');
+Route::get('/expedientes/create/', [ExpedientesController::class,'create'])->middleware(['auth'])->name('create.expediente');
+Route::get('/expedientes/edit/{id}', [ExpedientesController::class,'edit'])->middleware(['auth'])->name('edit.expediente');
+Route::post('/expedientes/store/', [ExpedientesController::class,'store'])->middleware(['auth'])->name('store.expediente');
+Route::get('/expedientes/buscar/{numero}', [ExpedientesController::class,'show'])->middleware(['auth'])->name('buscar.expediente');;
+Route::post('/expedientes/update', [ExpedientesController::class,'update'])->middleware(['auth'])->name('update.expediente');;
+
+//Cronogramas
+Route::get('/cronogramas/index/{expediente_id}', [CronogramasController::class,'index'])->middleware(['auth'])->name('index.cronograma');
+Route::post('/cronogramas/store/', [CronogramasController::class,'store'])->middleware(['auth'])->name('store.cronograma');
+Route::put('/cronogramas/update/{cronograma_id}', [CronogramasController::class,'update'])->middleware(['auth'])->name('update.cronograma');
+Route::get('/cronogramas/show/{expediente_id}', [CronogramasController::class,'show'])->middleware(['auth'])->name('show.cronograma');
+
+//Pagos
+Route::post('/pagos/store/', [PagosController::class,'store'])->middleware(['auth'])->name('store.pagos');
+Route::post('/pagos/update/{id}', [PagosController::class,'update'])->middleware(['auth'])->name('update.pagos');
+Route::get('/pagos/index/{cronograma_id}', [PagosController::class,'index'])->middleware(['auth'])->name('index.pagos');
+
+//Provincia,Distritos, Regiones
+Route::get('/distritos', [RegionesController::class,'index_distritos']);
+Route::get('/provincias', [RegionesController::class,'index_provincias']);
+Route::get('/regiones', [RegionesController::class,'index_regiones']);

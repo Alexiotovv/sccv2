@@ -5,13 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\cronogramas;
 use Illuminate\Http\Request;
 use Validator;
+use DB;
 
 class CronogramasController extends Controller
 {
 
-    public function index()
+    public function index($expediente_id)
     {
         
+        $cronogramas = DB::table('cronogramas')
+        ->where('cronogramas.id_expedientes','=',$expediente_id)
+        ->select('cronogramas.*')
+        ->get();
+        return response()->json($cronogramas);
     }
 
 
@@ -23,21 +29,23 @@ class CronogramasController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        // try {
             
             $validator=Validator::make($request->all(),[
-                'id_expediente'=> 'required|integer',
                 'numero_cuotas'=>'required|integer',
                 'fecha_inicial_pago'=>'required|date',
                 'monto_pagar'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
                 'interes_aplicado'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
             ]);
+
             if ($validator->fails()) {
                 return response()->json(['status'=>'required','data'=>$validator->errors()],422);
             }
-            $existe_cronograma= cronogramas::find(request('id_expediente'));
 
-            if (!$existe_cronograma) {
+
+            // $existe_cronograma= cronogramas::find(request('id_expediente'));
+
+            // if (!$existe_cronograma) {
                 $cronograma = new cronogramas();
                 $cronograma->id_user=auth()->user()->id;
                 $cronograma->id_expedientes=request('id_expediente');
@@ -47,25 +55,36 @@ class CronogramasController extends Controller
                 $cronograma->interes_aplicado=request('interes_aplicado');
                 $cronograma->save();
                 return response()->json(['status'=>'success','message'=>'Registro Correcto'], 200);
-            }else{
-                return response()->json(['status'=>'error','message'=>'No se puede registrar otro cronograma para un expediente'], 200);
-            }
-        } catch (\Throwable $th) {
-            return response()->json(['status'=>'error','data'=>$th], 500);
-        }
+            // }else{
+            //     return response()->json(['status'=>'error','message'=>'No se puede registrar otro cronograma para un expediente'], 200);
+            // }
+        // } catch (\Throwable $th) {
+        //     return response()->json(['status'=>'error','data'=>$th], 500);
+        // }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request,$expediente_id)
+    public function show($expediente_id)
     {
-        $cronograma=cronogramas::where('id_expedientes',$expediente_id)->first();
-        
+        $cronograma=DB::table('expedientes')
+        ->leftjoin('deudores','deudores.id','=','expedientes.id_deudores')
+        ->leftjoin('direcciones','direcciones.id','=','expedientes.id_direcciones')
+        ->select('deudores.nombre',
+        'deudores.apellidos',
+        'deudores.nombre_rep',
+        'deudores.apellidos_rep',
+        'expedientes.concepto',
+        'expedientes.expediente',
+        'direcciones.nombre as entidad_sancionadora',
+        )
+        ->where('expedientes.id','=',$expediente_id)
+        ->first();
         if ($cronograma) {
             return response()->json(['status'=>'success','data'=>$cronograma], 200);
         }else{
-            return response()->json(['message'=>'No Se encontraron los datos'], 404);
+            return response()->json(['message'=>'No Se encontraron los datos'], 201);
         }
     }
 

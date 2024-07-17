@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\expedientes;
+use App\Models\direcciones;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
@@ -60,16 +61,19 @@ class ExpedientesController extends Controller
     }
 
 
-    public function index(int $itemsPerPage = 1, int $page =1)
+    public function index()
     {
         $expedientes=DB::table('expedientes')
         ->leftjoin('deudores','deudores.id','=','expedientes.id_deudores')
         ->leftjoin('direcciones','direcciones.id','=','expedientes.id_direcciones')
-        ->leftjoin('cronogramas','cronogramas.id_expedientes','=','expedientes.id')
         ->select(
             'expedientes.id',
             'deudores.nombre',
             'deudores.apellidos',
+            'deudores.nombre_rep',
+            'deudores.apellidos_rep',
+            'deudores.dni',
+            'deudores.ruc',
             'direcciones.id as id_direccion',
             'direcciones.nombre as direccion',
             'expedientes.concepto',
@@ -82,13 +86,12 @@ class ExpedientesController extends Controller
             'expedientes.fecha_resolucion_admin',
             'expedientes.noaperturado',
             'expedientes.archivo',
-            'expedientes.created_at',
-            DB::raw('(IF(cronogramas.id > 0, true, false)) AS tiene_cronograma'))
-        ->paginate($itemsPerPage, ['*'], 'page', $page);
-        return response()->json([
-            'status'=>'success',
-            'data'=>$expedientes->items(),
-            'total_items'=>$expedientes->total()],200);
+            'expedientes.created_at')
+        ->orderBy('expedientes.id','desc')
+        ->paginate(1500);
+        
+        return view('expedientes.index',compact('expedientes'));
+        
 
     }
 
@@ -97,7 +100,8 @@ class ExpedientesController extends Controller
      */
     public function create()
     {
-        //
+        $oficinas=direcciones::all();
+        return view('expedientes.create',compact('oficinas'));
     }
 
     /**
@@ -105,28 +109,43 @@ class ExpedientesController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $validator=Validator::make($request->all(),[
-            'deudor' => 'required|integer|',
-            'direccion'=> 'required|integer',
-            'concepto'=>'required|string|max:250',
-            'monto'=>'required|numeric',
-            'expediente'=>'required|string|max:250',
-            'fecha'=>'required|date',
-            'uit'=>'required|numeric',
-            'importe'=>'required|numeric',
-            'resolucion_admin'=>'required|string|max:250',
-            'fecha_resolucion_admin'=>'required|date',
-            'noaperturado'=>'required|boolean',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json(['status'=>'required','data'=>$validator->errors()],422);
-        }
+        
+        $rules = [
+            'id_deudor' => 'required|integer',
+            'concepto' => 'required|string|max:250',
+            'monto' => 'required|numeric',
+            'expediente' => 'required|string|max:250',
+            'fecha' => 'required|date',
+            'uit' => 'required|numeric',
+            'importe' => 'required|numeric',
+            'fecha_resolucion_admin' => 'required|date',
+        ];
+
+        $messages = [
+            'id_deudor.required' => 'El campo deudor es obligatorio.',
+            'concepto.required' => 'El campo concepto es obligatorio.',
+            'monto.required' => 'El campo monto es obligatorio.',
+            'expediente.required' => 'El campo expediente es obligatorio.',
+            'expediente.max' => 'El campo expediente no debe exceder los 250 caracteres.',
+            'fecha.date' => 'El campo fecha debe ser una fecha válida.',
+            'importe.required' => 'El campo importe es obligatorio.',
+            'importe.numeric' => 'El campo importe debe ser un número.',
+            'fecha_resolucion_admin.required' => 'El campo fecha de resolución administrativa es obligatorio.',
+            'fecha_resolucion_admin.date' => 'El campo fecha de resolución administrativa debe ser una fecha válida.',
+            
+        ];
+        $this->validate($request, $rules, $messages);
         // return response()->json(['status'=>'success','data'=>'Registro Creado'],200);
+        
+        if (request('noaperturado')=='on'){
+            $administrado=true;
+        }else{
+            $administrado=false;
+        }
         $obj = new expedientes();
-        $obj->id_deudores=request('deudor');
-        $obj->id_direcciones=request('direccion');
+        $obj->id_deudores=request('id_deudor');
+        $obj->id_direcciones=request('oficina');
         $obj->concepto=request('concepto');
         $obj->monto=request('monto');
         $obj->expediente=request('expediente');
@@ -135,7 +154,7 @@ class ExpedientesController extends Controller
         $obj->importe=request('importe');
         $obj->resolucion_admin=request('resolucion_admin');
         $obj->fecha_resolucion_admin=request('fecha_resolucion_admin');
-        $obj->noaperturado=request('noaperturado');
+        $obj->noaperturado=$administrado;
 
 
         if ($request->hasFile('archivo')){
@@ -149,7 +168,7 @@ class ExpedientesController extends Controller
 
         $obj->save();
 
-        return response()->json(['status'=>'success','message'=>'Registro Creado'],200);
+        return redirect()->route('index.expedientes')->with('mensaje','Expediente Creado!');
     }
 
     /**
@@ -192,34 +211,81 @@ class ExpedientesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(coactivos $coactivos)
+    public function edit($id)
     {
-        //
+        $oficinas=direcciones::all();
+        $expediente=DB::table('expedientes')
+        ->leftjoin('deudores','deudores.id','=','expedientes.id_deudores')
+        ->leftjoin('direcciones','direcciones.id','=','expedientes.id_direcciones')
+        ->leftjoin('cronogramas','cronogramas.id_expedientes','=','expedientes.id')
+        ->select(
+            'expedientes.id',
+            'deudores.dni',
+            'deudores.ruc',
+            'deudores.nombre',
+            'deudores.razon',
+            'deudores.apellidos',
+            'deudores.domicilio',
+            'direcciones.id as id_direccion',
+            'direcciones.nombre as direccion',
+            'expedientes.concepto',
+            'expedientes.monto',
+            'expedientes.expediente',
+            'expedientes.fecha',
+            'expedientes.uit',
+            'expedientes.importe',
+            'expedientes.resolucion_admin',
+            'expedientes.fecha_resolucion_admin',
+            'expedientes.noaperturado',
+            'expedientes.archivo',
+            DB::raw('(IF(cronogramas.id > 0, true, false)) AS tiene_cronograma')
+            )
+        ->where('expedientes.id','=',$id)
+        ->first();
+
+        return view('expedientes.edit',compact('oficinas','expediente'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$expediente_id)
+    public function update(Request $request)
     {
-        $validator=Validator::make($request->all(),[
-            'direccion'=> 'required|integer',
-            'concepto'=>'required|string|max:250',
-            'monto'=>'required|numeric',
-            'expediente'=>'required|string|max:250',
-            'fecha'=>'required|date',
-            'uit'=>'required|numeric',
-            'importe'=>'required|numeric',
-            'resolucion_admin'=>'required|string|max:250',
-            'fecha_resolucion_admin'=>'required|date',
-            'noaperturado'=>'required|boolean',
-        ]);
+        $expediente_id=request('id_expediente');
         
-        if ($validator->fails()) {
-            return response()->json(['status'=>'required','data'=>$validator->errors()],422);
+        
+        $rules = [
+            'concepto' => 'required|string|max:250',
+            'monto' => 'required|numeric',
+            'expediente' => 'required|string|max:250',
+            'fecha' => 'required|date',
+            'uit' => 'required|numeric',
+            'importe' => 'required|numeric',
+            'fecha_resolucion_admin' => 'required|date',
+        ];
+
+        $messages = [
+            
+            'concepto.required' => 'El campo concepto es obligatorio.',
+            'monto.required' => 'El campo monto es obligatorio.',
+            'expediente.required' => 'El campo expediente es obligatorio.',
+            'expediente.max' => 'El campo expediente no debe exceder los 250 caracteres.',
+            'fecha.date' => 'El campo fecha debe ser una fecha válida.',
+            'importe.required' => 'El campo importe es obligatorio.',
+            'importe.numeric' => 'El campo importe debe ser un número.',
+            'fecha_resolucion_admin.required' => 'El campo fecha de resolución administrativa es obligatorio.',
+            'fecha_resolucion_admin.date' => 'El campo fecha de resolución administrativa debe ser una fecha válida.',
+        ];
+        $this->validate($request, $rules, $messages);
+
+        if (request('noaperturado')=='on'){
+            $administrado=true;
+        }else{
+            $administrado=false;
         }
+
         $obj = expedientes::findOrFail($expediente_id);
-        $obj->id_direcciones=request('direccion');
+        $obj->id_direcciones=request('oficina');
         $obj->concepto=request('concepto');
         $obj->monto=request('monto');
         $obj->expediente=request('expediente');
@@ -228,7 +294,7 @@ class ExpedientesController extends Controller
         $obj->importe=request('importe');
         $obj->resolucion_admin=request('resolucion_admin');
         $obj->fecha_resolucion_admin=request('fecha_resolucion_admin');
-        $obj->noaperturado=request('noaperturado');
+        $obj->noaperturado=$administrado;
 
 
         if ($request->hasFile('archivo')){
@@ -241,8 +307,8 @@ class ExpedientesController extends Controller
         }
 
         $obj->save();
-
-        return response()->json(['status'=>'success','message'=>'Registro Actualizado'],200);
+                
+        return redirect()->route('index.expedientes')->with('mensaje','Expediente Actualizado!');
     }
 
     /**

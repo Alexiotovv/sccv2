@@ -17,34 +17,28 @@ class AuthController extends Controller
     
     public function login(Request $request)
     {
-        
         $credentials = $request->only('email', 'password');
-    
+        
         if (Auth::attempt($credentials)) {
-            $user = Auth::user(); // Obtener el usuario autenticado
-            $token = JWTAuth::attempt($credentials);
-    
-            if ($token) {
-                return response()->json(['status'=>'success','data'=>$user,'token' => $token]);
-            } else {
-                return response()->json(['error' => 'Unauthorized'], 402);
-            }
+            // Autenticación exitosa
+            return redirect()->intended('home'); // Redirigir al usuario autenticado
         } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            // Autenticación fallida
+            return redirect()->route('credentials')->with('mensaje', 'Credenciales incorrectas o no está autorizado!');
         }
     }
 
 
     public function logout()
     {
-        $token = JWTAuth::getToken(); // Obtener el token JWT de la solicitud
-        if ($token) {
-            JWTAuth::invalidate($token); // Invalidar el token JWT
-        }
-        return response()->json(['data'=>'success','message' => 'Successfully logged out']);
+        // $token = JWTAuth::getToken(); // Obtener el token JWT de la solicitud
+        // if ($token) {
+        //     JWTAuth::invalidate($token); // Invalidar el token JWT
+        // }
+        // return response()->json(['data'=>'success','message' => 'Successfully logged out']);
     
-        // Auth::logout(); // Cerrar sesión en la aplicación
-        // return view('login');
+        Auth::logout(); // Cerrar sesión en la aplicación
+        return view('auth.login');
     }
 
     

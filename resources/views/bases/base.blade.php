@@ -45,8 +45,8 @@
 
 
 
-  @if (Route::has('login'))
-  @auth
+  @if (Auth::check())
+  
 <!-- [Body] Start -->
 
       <body data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true" data-pc-direction="ltr" data-pc-theme="light">
@@ -74,7 +74,7 @@
               <li class="pc-item pc-caption">
                 <label>Navigation</label>
               </li>
-              <li class="pc-item pc-hasmenu">
+              {{-- <li class="pc-item pc-hasmenu">
                 <a href="#!" class="pc-link">
                   <span class="pc-micon">
                     <i class="ph-duotone ph-gauge"></i>
@@ -89,18 +89,41 @@
                 <ul class="pc-submenu">
                   <li class="pc-item"><a class="pc-link" href="">Métricas</a></li> 
                 </ul>
-              </li>
+              </li> --}}
               <li class="pc-item pc-hasmenu">
                 <a href="#!" class="pc-link"
-                  ><span class="pc-micon"> <i class="ph-duotone ph-layout"></i></span><span class="pc-mtext">Options</span
+                  ><span class="pc-micon"> <i class="ph-duotone ph-layout"></i></span><span class="pc-mtext">Opciones</span
                   ><span class="pc-arrow"><i data-feather="chevron-right"></i></span
                 ></a>
                 <ul class="pc-submenu">
-                  <li class="pc-item"><a class="pc-link" href="">Data Register </a></li>
-                  
+                  <li class="pc-item"><a class="pc-link" href="{{route('index.expedientes')}}">Expediente</a></li>
+                  <li class="pc-item"><a class="pc-link" href="{{route('index.ejecutado')}}">Ejecutados</a></li>
+                  @if(auth()->user()->role == 0)
+                    <li class="pc-item"><a class="pc-link" href="{{route('users')}}">Usuarios</a></li>
+                  @endif
+                </ul>
+                <ul class="pc-submenu">
                 </ul>
               </li>
 
+              <li class="pc-item pc-hasmenu">
+                <a href="#!" class="pc-link"
+                  ><span class="pc-micon"> <i class="ph-duotone ph-layout"></i></span><span class="pc-mtext">Configuraciones</span
+                  ><span class="pc-arrow"><i data-feather="chevron-right"></i></span
+                ></a>
+                <ul class="pc-submenu">
+                  @if(auth()->user()->role == 0)
+                    <li class="pc-item"><a class="pc-link" href="{{route('users')}}">Usuarios</a></li>
+                  @endif
+                  
+                  @if(auth()->user()->role == 0 or auth()->user()->role == 1 or auth()->user()->role == 2)
+                    <li class="pc-item"><a class="pc-link" href="">Constancias</a></li>
+                  @endif
+
+                </ul>
+                <ul class="pc-submenu">
+                </ul>
+              </li>
 
             </ul>
             <!-- <div class="card nav-action-card bg-brand-color-4">
@@ -111,7 +134,7 @@
               </div>
             </div> -->
           </div>
-          <div class="card pc-user-card">
+          {{-- <div class="card pc-user-card">
             <div class="card-body">
               <div class="d-flex align-items-center">
                 <div class="flex-shrink-0">
@@ -124,7 +147,7 @@
           
               </div>
             </div>
-          </div>
+          </div> --}}
         </div>
       </nav>
       <!-- [ Sidebar Menu ] end -->
@@ -209,6 +232,7 @@
             </a>
           </li> --}}
           <li class="dropdown pc-h-item">
+            Hola, {{ auth()->user()->name }}
             <a
               class="pc-head-link dropdown-toggle arrow-none me-0"
               data-bs-toggle="dropdown"
@@ -236,9 +260,9 @@
                 <i class="ph-duotone ph-lock-key"></i>
                 <span>Lock Screen</span>
               </a> --}}
-              <a href="#" class="dropdown-item" id="Salir">
+              <a href="{{route('logout')}}" class="dropdown-item" id="Salir">
                 <i class="ph-duotone ph-power"></i>
-                <span>Logout</span>
+                <span>Salir</span>
               </a>
             </div>
           </li>
@@ -253,6 +277,7 @@
               data-bs-auto-close="outside"
               aria-expanded="false"
             >
+            
               <img src="../../../assets/images/user/avatar-2.jpg" alt="user-image" class="user-avtar" />
             </a>
         
@@ -276,25 +301,22 @@
         <div class="footer-wrapper container-fluid">
           <div class="row">
             <div class="col-sm-6 my-1">
-              <p class="m-0">Made with &#9829; by Team <a href="https://themeforest.net/user/phoenixcoded" target="_blank"> Phoenixcoded</a></p>
+              
             </div>
             <div class="col-sm-6 ms-auto my-1">
-              <ul class="list-inline footer-link mb-0 justify-content-sm-end d-flex">
-                <li class="list-inline-item"><a href="https://html.phoenixcoded.net/light-able/bootstrap/index.html">Home</a></li>
-                <li class="list-inline-item"><a href="https://pcoded.gitbook.io/light-able/" target="_blank">Documentation</a></li>
-                <li class="list-inline-item"><a href="https://phoenixcoded.support-hub.io/" target="_blank">Support</a></li>
-              </ul>
+              
             </div>
           </div>
         </div>
       </footer>
 
-@else
-  <div class="row" style="padding:50px;" >
-    aqui debe ir ub boton de login
-  </div>
-  @endauth
-@endif
+      @else
+      <div class="row">
+        <div class="col-md-4">
+          <a type="button" class="btn btn-primary" href="{{route('credentials')}}">Inicie sesión</a>
+        </div>
+      </div>
+      @endif
 
 
  <!-- Required Js -->
@@ -354,19 +376,7 @@
 <!-- Mirrored from html.phoenixcoded.net/light-able/bootstrap/widget/w_data.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 07 May 2024 15:07:45 GMT -->
 
 
-<script>
-  
-  $("#Salir").on("click",function () { 
-    $.ajax({
-      type: "GET",
-      url: "/api/logout",
-      success: function (response) {
-        window.location.href = "/login";
-      }
-    });
-   })
-  
-</script>
+
 
 @yield('js')
 

@@ -17,8 +17,8 @@ class RegionesController extends Controller
     }
     public function index_provincias()
     {
-        $distritos = provincias::all()->select('id','id_regiones','nombre_provincia');
-        return response()->json(['status'=>'success','data'=>$distritos], 200);
+        $provincias = provincias::all()->select('id','id_regiones','nombre_provincia');
+        return response()->json(['status'=>'success','data'=>$provincias], 200);
     }
     public function index_regiones()
     {
