@@ -4,4 +4,4 @@
       - export DEPLOYPATH=/home/gorel/public_html/scc.regionloreto.gob.pe/
       - /bin/rsync -av public/ $DEPLOYPATH
       - export DEPLOYPATH=/home/gorel/web_scc/
-      - /bin/rsync -avz ./ $DEPLOYPATH
+      - /bin/rsync -av ./ $DEPLOYPATH
