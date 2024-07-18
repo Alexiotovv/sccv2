@@ -364,6 +364,22 @@
 
         $("#btnAgregarCronograma").on("click",function (e) {
             e.preventDefault();
+            guardarCronograma();
+
+        })
+
+        $(document).on("click",".btnPagos",function (e) { 
+            e.preventDefault();
+            $("#modalPagos").modal('show');
+            fila = $(this).closest("tr");
+            id = (fila).find('td:eq(0)').text();
+            monto = (fila).find('td:eq(3)').text();
+            $("#id_cronograma").val(id);
+            $("#monto").val(monto);
+            llenaDataTablePagos(id);
+        })
+
+        function guardarCronograma(){
             id=$("#id_expediente").val();
             var form = $('#formCronograma')[0];
             var formData = new FormData(form);
@@ -381,19 +397,7 @@
             });
 
             $("#modalCrearCronograma").modal('hide');
-
-        })
-
-        $(document).on("click",".btnPagos",function (e) { 
-            e.preventDefault();
-            $("#modalPagos").modal('show');
-            fila = $(this).closest("tr");
-            id = (fila).find('td:eq(0)').text();
-            monto = (fila).find('td:eq(3)').text();
-            $("#id_cronograma").val(id);
-            $("#monto").val(monto);
-            llenaDataTablePagos(id);
-         })
+        }
 
         function guardarPago() { 
             var form = $('#formPagos')[0];
