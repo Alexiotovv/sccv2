@@ -368,7 +368,7 @@
             id=$("#id_expediente").val();
             $.ajax({
                 type: "POST",
-                url: "/cronogramas/store/",
+                url: "/cronogramas/store",
                 data: ds,
                 dataType: "json",
                 success: function (response) {
