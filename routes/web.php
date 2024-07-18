@@ -12,8 +12,9 @@ use App\Http\Controllers\GenerateTokensController;
 use App\Http\Controllers\CronogramasController;
 use App\Http\Controllers\PagosController;
 use App\Http\Controllers\VregistralsController;
-
+use App\Http\Controllers\ConstanciasdatosController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ConstanciasemitidosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,7 +69,7 @@ Route::get('/expedientes/edit/{id}', [ExpedientesController::class,'edit'])->mid
 Route::post('/expedientes/store/', [ExpedientesController::class,'store'])->middleware(['auth'])->name('store.expediente');
 Route::get('/expedientes/buscar/{numero}', [ExpedientesController::class,'show'])->middleware(['auth'])->name('buscar.expediente');;
 Route::post('/expedientes/update', [ExpedientesController::class,'update'])->middleware(['auth'])->name('update.expediente');;
-
+Route::get('/expedientes/buscar/doc/{dniruc}', [ExpedientesController::class,'buscar_doc'])->middleware(['auth'])->name('buscar.expediente.dniruc');;
 //Cronogramas
 Route::get('/cronogramas/index/{expediente_id}', [CronogramasController::class,'index'])->middleware(['auth'])->name('index.cronograma');
 Route::post('/cronogramas/store/', [CronogramasController::class,'store'])->middleware(['auth'])->name('store.cronograma');
@@ -79,6 +80,20 @@ Route::get('/cronogramas/show/{expediente_id}', [CronogramasController::class,'s
 Route::post('/pagos/store/', [PagosController::class,'store'])->middleware(['auth'])->name('store.pagos');
 Route::post('/pagos/update/{id}', [PagosController::class,'update'])->middleware(['auth'])->name('update.pagos');
 Route::get('/pagos/index/{cronograma_id}', [PagosController::class,'index'])->middleware(['auth'])->name('index.pagos');
+
+//contancias
+Route::get('/constancias/index', [ConstanciasemitidosController::class,'index'])->middleware(['auth'])->name('index.constancias');
+Route::post('/constancias/store', [ConstanciasemitidosController::class,'store'])->middleware(['auth'])->name('store.constancias');
+Route::get('/constancias/imprimir/{id_constancia}', [ConstanciasemitidosController::class,'imprimir'])->middleware(['auth'])->name('imprimir.constancias');
+
+//constancias datos
+Route::get('/datos/constancias/index', [ConstanciasdatosController::class,'datos_index'])->middleware(['auth'])->name('datos.constancias.index');
+Route::post('/datos/constancias/store', [ConstanciasdatosController::class,'datos_store'])->middleware(['auth'])->name('datos.constancias.store');
+Route::get('/datos/constancias/edit/{id}', [ConstanciasdatosController::class,'datos_edit'])->middleware(['auth'])->name('datos.constancias.edit');
+Route::post('/datos/constancias/update', [ConstanciasdatosController::class,'datos_update'])->middleware(['auth'])->name('datos.constancias.update');
+
+//CorrelativoCartas de No Adeudo
+Route::post('/numero/correlativo/update', [ConstanciasdatosController::class,'correlativo_update'])->middleware(['auth'])->name('correlativo.update');
 
 //Provincia,Distritos, Regiones
 Route::get('/distritos', [RegionesController::class,'index_distritos']);

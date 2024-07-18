@@ -22,6 +22,9 @@ class DatabaseSeeder extends Seeder
         DB::table('direcciones')->insert([
             'nombre'=>'OFICINA DE PRUEBA',
         ]);
+        DB::table('numerocartas')->insert([
+            'numero_carta'=>1,
+        ]);
 
         DB::table('tipo_personas')->insert([
             ['codigo' => '01','nombre' => 'NATURAL'],

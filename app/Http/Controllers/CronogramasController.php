@@ -17,6 +17,7 @@ class CronogramasController extends Controller
         ->where('cronogramas.id_expedientes','=',$expediente_id)
         ->select('cronogramas.*')
         ->get();
+        
         return response()->json($cronogramas);
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\expedientes;
 use App\Models\direcciones;
+use App\Models\deudores;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
@@ -63,6 +64,7 @@ class ExpedientesController extends Controller
 
     public function index()
     {
+        
         $expedientes=DB::table('expedientes')
         ->leftjoin('deudores','deudores.id','=','expedientes.id_deudores')
         ->leftjoin('direcciones','direcciones.id','=','expedientes.id_direcciones')
@@ -311,11 +313,40 @@ class ExpedientesController extends Controller
         return redirect()->route('index.expedientes')->with('mensaje','Expediente Actualizado!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function buscar_doc($dniruc)
+    {
+        $deudor= deudores::where('dni',$dniruc)->first();
+        if (!$deudor) {
+            $deudor=deudores::where('ruc',$dniruc)->first();   
+        }
+
+        if ($deudor) {
+            $datos=DB::table('expedientes')
+            ->leftjoin('cronogramas','cronogramas.id_expedientes','=','expedientes.id')
+            ->select(
+                'expedientes.id',
+                'expedientes.expediente as numero_expediente',
+                'expedientes.monto',
+                'expedientes.concepto',
+                'expedientes.fecha',
+                'cronogramas.estado'
+            )
+            ->where('expedientes.id_deudores','=',$deudor->id)
+            ->get();
+            
+            return response()->json(['data'=>$datos]);
+        }else {
+            
+            return response()->json(['status'=>'No se encontró datos']);
+        }
+
+
+    }
+
     public function destroy(coactivos $coactivos)
     {
         //
     }
+
+
 }

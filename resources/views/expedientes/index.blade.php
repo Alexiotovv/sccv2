@@ -121,7 +121,7 @@
                     </div>
                     <hr>
                     <h5>Datos del Cronograma</h5>
-                    <button class="btn btn-light btn-sm" onclick="crearCronograma()"><i class="fas fa-calendar-alt"> Crear Cronograma</i></button>
+                    <button class="btn btn-light btn-sm" id="btnCrearCronograma" onclick="crearCronograma()"><i class="fas fa-calendar-alt"> Crear Cronograma</i></button>
                     <div class="table-responsive">
                         <table id="dtCronograma" class="table table-striped table-bordered" style="width:100%">                            
                             <thead>
@@ -296,16 +296,26 @@
             $("#modalCronograma").modal('show');
             $.ajax({
                 type: "GET",
-                url: "/cronogramas/show/"+id,
+                url: "/cronogramas/show/" + id,
                 dataType: "json",
                 success: function (response) {
-                    
-                    $("#ejecutado").text(response.data.nombre + " "+response.data.apellidos + " "+response.data.nombre_rep + " "+response.data.apellidos_rep);
-                    $("#concepto").text(response.data.concepto);
-                    $("#expediente").text(response.data.expediente);
-                    $("#entidad_sancionadora").text(response.data.entidad_sancionadora);
+ 
+                    if (response && response.data) {
+                        $("#ejecutado").text(response.data.nombre + " " + response.data.apellidos + " " + response.data.nombre_rep + " " + response.data.apellidos_rep);
+                        $("#concepto").text(response.data.concepto);
+                        $("#expediente").text(response.data.expediente);
+                        $("#entidad_sancionadora").text(response.data.entidad_sancionadora);
+                    } else {
+                        alert("la estructura no coincide");
+                        // Puedes agregar lógica adicional para manejar el caso de datos faltantes o incorrectos
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Error al procesar la solicitud:", error);
+                    // Puedes agregar lógica para manejar errores de red o del servidor
                 }
             });
+
 
             llenarDataTableCronograma(id);
 
@@ -320,7 +330,12 @@
                 dataType: "json",
                 success: function (response) {
                     $("#dtCronograma tbody").html("");
-                    
+
+                    if (response.length==0) {
+                        $("#btnCrearCronograma").show();
+                    }else{
+                        $("#btnCrearCronograma").hide();
+                    }
                     response.forEach(element => {
                         let estadoTexto = element.estado ? '<p style="color:green">CANCELADO</p>' : '<p style="color:red">PENDIENTE</p>';
                         

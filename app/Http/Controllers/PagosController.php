@@ -122,4 +122,6 @@ class PagosController extends Controller
         return response()->json(['status'=>'success','message'=>'Pago Actualizado'], 200);
         
     }
+
+
 }

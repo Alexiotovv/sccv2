@@ -139,7 +139,7 @@
                 success: function (response) {
                     
                     if (response.message) {
-                        console.log("entro a messaage")
+                        
                         $("#MensajeBusqueda").text("No se encontró el documento, intente nuevamente");
                         $("#MensajeBusqueda").prop('hidden',false);
                         $("#nombre").val("");

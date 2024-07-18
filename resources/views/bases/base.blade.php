@@ -115,15 +115,26 @@
                   @if(auth()->user()->role == 0)
                     <li class="pc-item"><a class="pc-link" href="{{route('users')}}">Usuarios</a></li>
                   @endif
-                  
-                  @if(auth()->user()->role == 0 or auth()->user()->role == 1 or auth()->user()->role == 2)
-                    <li class="pc-item"><a class="pc-link" href="">Constancias</a></li>
-                  @endif
-
                 </ul>
                 <ul class="pc-submenu">
                 </ul>
               </li>
+
+
+              @if(auth()->user()->role == 0 or auth()->user()->role == 1 or auth()->user()->role == 2)
+                <li class="pc-item pc-hasmenu">
+                  <a href="#!" class="pc-link"
+                    ><span class="pc-micon"> <i class="ph-duotone ph-layout"></i></span><span class="pc-mtext">Constancias</span
+                    ><span class="pc-arrow"><i data-feather="chevron-right"></i></span
+                  ></a>
+                  <ul class="pc-submenu">
+                      <li class="pc-item"><a class="pc-link" href="{{route('index.constancias')}}">Emisión Constancias</a></li>
+                      <li class="pc-item"><a class="pc-link" href="{{route('datos.constancias.index')}}">Datos Constancias</a></li>
+                    </ul>
+                    <ul class="pc-submenu">
+                    </ul>
+                </li>
+              @endif
 
             </ul>
             <!-- <div class="card nav-action-card bg-brand-color-4">
