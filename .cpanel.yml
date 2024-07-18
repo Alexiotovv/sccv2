@@ -3,5 +3,5 @@
     tasks:
       - export DEPLOYPATH=/home/gorel/public_html/scc.regionloreto.gob.pe/
       - /bin/rsync -av public/ $DEPLOYPATH
-      - export DEPLOYPATH=/home/gorel/web_scc/
+      - export DEPLOYPATH=/home/gorel/web_sccv2/
       - /bin/rsync -av ./ $DEPLOYPATH
