@@ -166,7 +166,7 @@
             </div>
             
                 <div class="modal-body">
-                    <form id="formCronograma" >@csrf
+                    <form id="formCronograma" method="POST">@csrf
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="text" name="id_expediente" id="id_expediente" hidden>
