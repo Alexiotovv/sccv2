@@ -364,12 +364,16 @@
 
         $("#btnAgregarCronograma").on("click",function (e) {
             e.preventDefault();
-            ds=$("#formCronograma").serialize();
             id=$("#id_expediente").val();
+            var form = $('#formCronograma')[0];
+            var formData = new FormData(form);
+            
             $.ajax({
                 type: "POST",
                 url: "/cronogramas/store",
-                data: ds,
+                data: formData,
+                contentType: false,
+                processData: false,
                 dataType: "json",
                 success: function (response) {
                     llenarDataTableCronograma(id);
