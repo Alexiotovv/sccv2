@@ -73,6 +73,7 @@ Route::get('/expedientes/buscar/doc/{dniruc}', [ExpedientesController::class,'bu
 //Cronogramas
 Route::get('/cronogramas/index/{expediente_id}', [CronogramasController::class,'index'])->middleware(['auth'])->name('index.cronograma');
 Route::get('/cronogramas/store/', [CronogramasController::class,'store'])->name('store.cronograma');
+
 Route::put('/cronogramas/update/{cronograma_id}', [CronogramasController::class,'update'])->middleware(['auth'])->name('update.cronograma');
 Route::get('/cronogramas/show/{expediente_id}', [CronogramasController::class,'show'])->middleware(['auth'])->name('show.cronograma');
 
