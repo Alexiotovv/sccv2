@@ -392,12 +392,13 @@
                 processData: false,
                 dataType: "json",
                 success: function (response) {
+                    console.log(response);
                     llenarDataTableCronograma(id);
                 }
             });
-
             $("#modalCrearCronograma").modal('hide');
         }
+
 
         function guardarPago() { 
             var form = $('#formPagos')[0];

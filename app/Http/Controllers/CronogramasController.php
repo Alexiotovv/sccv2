@@ -31,7 +31,8 @@ class CronogramasController extends Controller
     public function store(Request $request)
     {
         // try {
-            
+            return response()->json(['status'=>'success','message'=>'Entrooooo'], 200);
+
             $validator=Validator::make($request->all(),[
                 'numero_cuotas'=>'required|integer',
                 'fecha_inicial_pago'=>'required|date',
@@ -55,6 +56,7 @@ class CronogramasController extends Controller
                 $cronograma->monto_pagar=request('monto_pagar');
                 $cronograma->interes_aplicado=request('interes_aplicado');
                 $cronograma->save();
+                
                 return response()->json(['status'=>'success','message'=>'Registro Correcto'], 200);
             // }else{
             //     return response()->json(['status'=>'error','message'=>'No se puede registrar otro cronograma para un expediente'], 200);
