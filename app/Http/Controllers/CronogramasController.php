@@ -31,7 +31,6 @@ class CronogramasController extends Controller
     public function store(Request $request)
     {
         // try {
-            return response()->json(['status'=>'success','message'=>'Entrooooo'], 200);
 
             $validator=Validator::make($request->all(),[
                 'numero_cuotas'=>'required|integer',
