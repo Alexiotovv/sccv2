@@ -98,9 +98,7 @@
                 <ul class="pc-submenu">
                   <li class="pc-item"><a class="pc-link" href="{{route('index.expedientes')}}">Expediente</a></li>
                   <li class="pc-item"><a class="pc-link" href="{{route('index.ejecutado')}}">Ejecutados</a></li>
-                  @if(auth()->user()->role == 0)
-                    <li class="pc-item"><a class="pc-link" href="{{route('users')}}">Usuarios</a></li>
-                  @endif
+                  
                 </ul>
                 <ul class="pc-submenu">
                 </ul>
