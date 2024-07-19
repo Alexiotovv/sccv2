@@ -183,7 +183,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="">Monto a Pagar</label>
-                                <input type="number" name="monto_pagar" class="form-control form-control-sm" required>
+                                <input type="number" step="0.01" name="monto_pagar" value="0.0" class="form-control form-control-sm" required>
                             </div>
 
                             <div class="col-md-6">
