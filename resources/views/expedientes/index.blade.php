@@ -254,6 +254,7 @@
                             <thead>
                             <tr>
                                 <th>N°</th>
+                                <th>Acción</th>
                                 <th>MONTO</th>
                                 <th>MÉTODO</th>
                                 <th>ESTADO</th>
@@ -406,7 +407,9 @@
                         $("#dtCronograma tbody").append(
                         "<tr>"+
                         "<td>"+element.id+"</td>"+ 
-                        "<td>"+'<button class="btn btn-light btn-sm btnPagos"><i class="fas fa-money-bill-alt"></i> Pagos</button>'+"</td>"+ 
+                        "<td>"+
+                            '<button class="btn btn-light btn-sm btnPagos"><i class="fas fa-money-bill-alt"></i> Pagos</button>'+
+                        "</td>"+ 
                         "<td>"+element.fecha_inicial_pago+"</td>"+ 
                         "<td>"+element.monto_pagar+"</td>"+
                         "<td>"+element.numero_cuotas+"</td>"+
@@ -456,7 +459,6 @@
                 processData: false,
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
                     llenarDataTableCronograma(id);
                 }
             });
@@ -491,7 +493,7 @@
                     $("#dtPagos tbody").html("");
                     var numero = 0;
                     response.data.forEach(element => {
-                        numero += 1;
+                        // numero += 1;
                         var archivo = '';
                         var estado = false;
                         if (element.archivo) {
@@ -508,13 +510,16 @@
 
                         $("#dtPagos tbody").append(
                             "<tr>" +
-                            "<td>" + numero + "</td>" +
-                            "<td>" + element.monto + "</td>" +
-                            "<td>" + element.metodo + "</td>" +
-                            "<td>" + estado + "</td>" +
-                            "<td>" + element.fecha + "</td>" +
-                            "<td>" + element.hora + "</td>" +
-                            "<td>" + archivo + "</td>" +
+                                "<td>" + element.id + "</td>" +
+                                "<td>"+ 
+                                    '<button class="btn btn-light btn-sm btnEliminarPago"><i class="fas fa-trash-alt"></i></button>'+
+                                "</td>"+
+                                "<td>" + element.monto + "</td>" +
+                                "<td>" + element.metodo + "</td>" +
+                                "<td>" + estado + "</td>" +
+                                "<td>" + element.fecha + "</td>" +
+                                "<td>" + element.hora + "</td>" +
+                                "<td>" + archivo + "</td>" +
                             "</tr>"
                         );
                     });
@@ -594,21 +599,51 @@
             fila = $(this).closest("tr");
             id = (fila).find('td:eq(0)').text();
             $("#id_registro_eliminar").val(id);
+            $("#nombre_modelo").val("vregistral");
             $("#modalEliminar").modal('show');
          })
 
-         function btnSiEliminar() {
-            id=$("#id_registro_eliminar").val();
-            $.ajax({
-                type: "GET",
-                url: "/vregistral/destroy/"+id,
-                dataType: "json",
-                success: function (response) {
-                    llenaDtVregistral();
-                }
-            });
+        $(document).on("click",".btnEliminarPago",function (e) { 
+        e.preventDefault()
+        fila = $(this).closest("tr");
+        id = (fila).find('td:eq(0)').text();
+        $("#id_registro_eliminar").val(id);
+        $("#nombre_modelo").val("pago");
+        $("#modalEliminar").modal('show');
+        })
+
+        function btnSiEliminar() {
+            nombre_modelo = $("#nombre_modelo").val();
+            let id_expediente = $("#id_expediente").val();
+
+            if (nombre_modelo=='vregistral') {
+
+                id=$("#id_registro_eliminar").val();
+                $.ajax({
+                    type: "GET",
+                    url: "/vregistral/destroy/"+id,
+                    dataType: "json",
+                    success: function (response) {
+                        llenaDtVregistral();
+                    }
+                });
+
+            }if(nombre_modelo=='pago'){
+                
+                let id=$("#id_registro_eliminar").val();
+                let id_cronograma= $("#id_cronograma").val()
+                $.ajax({
+                    type: "GET",
+                    url: "/pagos/destroy/"+id,
+                    dataType: "json",
+                    success: function (response) {
+                        llenaDataTablePagos(id_cronograma);
+                    }
+                });
+            }
+            llenarDataTableCronograma(id_expediente)
             $("#modalEliminar").modal('hide');
-         }
+        }
 
     </script>
     <script src="../../../assets/js/plugins/jquery.dataTables.min.js"></script>

@@ -80,6 +80,7 @@ Route::get('/cronogramas/show/{expediente_id}', [CronogramasController::class,'s
 Route::post('/pagos/store/', [PagosController::class,'store'])->middleware(['auth'])->name('store.pagos');
 Route::post('/pagos/update/{id}', [PagosController::class,'update'])->middleware(['auth'])->name('update.pagos');
 Route::get('/pagos/index/{cronograma_id}', [PagosController::class,'index'])->middleware(['auth'])->name('index.pagos');
+Route::get('/pagos/destroy/{id}', [PagosController::class,'destroy'])->middleware(['auth'])->name('destroy.pagos');
 
 //contancias
 Route::get('/constancias/index', [ConstanciasemitidosController::class,'index'])->middleware(['auth'])->name('index.constancias');

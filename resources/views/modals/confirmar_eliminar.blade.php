@@ -8,6 +8,7 @@
             
             <div class="modal-body">
                 <h5>Aceptar para Eliminar...</h5>
+                <input type="text" id="nombre_modelo" hidden>
                 <input type="text" id="id_registro_eliminar" hidden readonly>
             </div>
             <div class="modal-footer">

@@ -123,5 +123,25 @@ class PagosController extends Controller
         
     }
 
+    public function destroy($id){
+        $obj = pagos::find($id);
+    
+        if (!$obj) {
+            return response()->json(['message' => 'error', 'data' => 'Registro no encontrado'], 204);
+        }
+    
+        $obj->delete();
+        
+        //recalculamos el estado de cronograma
+        $id_cronograma = $obj->id_cronograma;
+        $estado_cronograma = $this->calcularEstadoCronograma($id_cronograma); // Asegúrate de llamar correctamente a la función
+        
+        if (!$estado_cronograma) {
+            $cronograma = cronogramas::findOrFail($id_cronograma);
+            $cronograma->estado = false; // Actualiza el estado del cronograma
+            $cronograma->save(); // Guarda los cambios en la base de datos
+        }
+        return response()->json(['message' => 'success', 'data' => 'Registro Eliminado'], 200);
+    }
 
 }
