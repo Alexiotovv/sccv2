@@ -129,7 +129,7 @@ class PagosController extends Controller
         if (!$obj) {
             return response()->json(['message' => 'error', 'data' => 'Registro no encontrado'], 204);
         }
-    
+
         $obj->delete();
         
         //recalculamos el estado de cronograma
