@@ -70,7 +70,7 @@
             <div class="col-md-12">
                 <div class="table-responsive">
                     <br>
-                    <table  class="table table-striped table-bordered">
+                    <table id="tablaConstanciasEmitidas" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>Id</th>
@@ -223,5 +223,17 @@
     })
 
     
+</script>
+<script src="../../../assets/js/plugins/jquery.dataTables.min.js"></script>
+<script src="../../../assets/js/plugins/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tablaConstanciasEmitidas').DataTable({
+            columnDefs: [
+                { width: '200px', targets: 1 }
+            ],
+            fixedColumns: true
+        });
+    });
 </script>
 @endsection

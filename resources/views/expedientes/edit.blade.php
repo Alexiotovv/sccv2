@@ -114,7 +114,7 @@
                         checked
                     @endif
                 >
-                <label class="form-check-label" for="noaperturado" >Administrado</label>
+                <label class="form-check-label" for="noaperturado" >Aperturado</label>
             </div>
     
             <div class="col-md-6">

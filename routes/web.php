@@ -95,6 +95,13 @@ Route::post('/datos/constancias/update', [ConstanciasdatosController::class,'dat
 //CorrelativoCartas de No Adeudo
 Route::post('/numero/correlativo/update', [ConstanciasdatosController::class,'correlativo_update'])->middleware(['auth'])->name('correlativo.update');
 
+//Verificacion Registral
+Route::post('/vregistral/store/', [VregistralsController::class,'store']);
+Route::middleware('jwt.auth')->put('/vregistral/update/{vregistral_id}', [VregistralsController::class,'update']);
+Route::get('/vregistral/index/{expediente_id}', [VregistralsController::class,'index']);
+Route::get('/vregistral/destroy/{id}', [VregistralsController::class,'destroy']);
+
+
 //Provincia,Distritos, Regiones
 Route::get('/distritos', [RegionesController::class,'index_distritos']);
 Route::get('/provincias', [RegionesController::class,'index_provincias']);

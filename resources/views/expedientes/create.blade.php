@@ -108,7 +108,7 @@
             <div class="col-md-3">
                 <br>
                 <input type="checkbox" class="form-check-input" id="noaperturado" name="noaperturado">
-                <label class="form-check-label" for="noaperturado" >Administrado</label>
+                <label class="form-check-label" for="noaperturado" >Aperturado</label>
             </div>
     
             <div class="col-md-6">

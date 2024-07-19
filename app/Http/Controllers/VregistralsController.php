@@ -8,16 +8,14 @@ use Validator;
 
 class VregistralsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request, $expediente_id)
     {
         try {
             $vr=vregistrals::where('id_expedientes',$expediente_id)->get();
-            return response()->json(['status'=>'success','data'=>$vr], 200);
+            return response()->json(['message'=>'success','data'=>$vr], 200);
         } catch (\Throwable $th) {
-            return response()->json(['status'=>'error','message'=>'Error de Servidor'],500);
+            return response()->json(['message'=>'error','data'=>'Error de Servidor'],500);
         }
     }
 
@@ -34,28 +32,28 @@ class VregistralsController extends Controller
      */
     public function store(Request $request)
     {
-        try {        
-            $validator=Validator::make($request->all(),[
-                'expediente_id' => 'required|integer|',
-                'prescrito'=> 'required|string|max:10',
-                'estado'=>'required|string|max:250',
-                'observaciones'=>'required|string|max:250',
-            ]);
+        try {
 
-            if ($validator->fails()) {
-                return response()->json(['status'=>'required','data'=>$validator->errors()],422);
-            }
+            $validator=Validator::make($request->all(),[
+                'prescrito'=> 'required|string|max:10',
+                'estado_vregistral'=>'required|string|max:250',
+                'observaciones'=>'max:250',
+            ]);
             
+            if ($validator->fails()) {
+                return response()->json(['message'=>'required','data'=>$validator->errors()],201);
+            }
+             
             $vr=new vregistrals();
-            $vr->id_expedientes=request('expediente_id');
+            $vr->id_expedientes=request('id_expediente_vr');
             $vr->prescrito=request('prescrito');
-            $vr->estado=request('estado');
+            $vr->estado=request('estado_vregistral');
             $vr->observaciones=request('observaciones');
             $vr->save();
 
-            return response()->json(['status'=>'success','message'=>'Registro Creado'],200);
+            return response()->json(['message'=>'success','data'=>'Registro Creado'],200);
         } catch (\Throwable $th) {
-            return response()->json(['status'=>'error','message'=>'Error de Servidor'],500);
+            return response()->json(['message'=>'error','data'=>'Error de Servidor'],202);
         }
     }
 
@@ -81,33 +79,42 @@ class VregistralsController extends Controller
     public function update(Request $request, $vregistral_id)
     {
         try {        
+            
             $validator=Validator::make($request->all(),[
                 'prescrito'=> 'required|string|max:10',
-                'estado'=>'required|string|max:250',
-                'observaciones'=>'required|string|max:250',
+                'estado_vregistral'=>'required|string|max:250',
+                'observaciones'=>'max:250',
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['status'=>'required','data'=>$validator->errors()],422);
+                return response()->json(['message'=>'required','data'=>$validator->errors()],422);
             }
             
             $vr=vregistrals::findOrFail($vregistral_id);
             $vr->prescrito=request('prescrito');
-            $vr->estado=request('estado');
+            $vr->estado=request('estado_vregistral');
             $vr->observaciones=request('observaciones');
             $vr->save();
 
-            return response()->json(['status'=>'success','message'=>'Registro Actualizado'],200);
+            return response()->json(['message'=>'success','data'=>'Registro Actualizado'],200);
         } catch (\Throwable $th) {
-            return response()->json(['status'=>'error','message'=>'Error de Servidor'],500);
+            return response()->json(['message'=>'error','data'=>'Error de Servidor'],500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(vregistrals $vregistrals)
+    public function destroy($id)
     {
-        //
+        $obj = vregistrals::find($id);
+    
+        if (!$obj) {
+            return response()->json(['message' => 'error', 'data' => 'Registro no encontrado'], 204);
+        }
+    
+        $obj->delete();
+        return response()->json(['message' => 'success', 'data' => 'Registro Eliminado'], 200);
     }
+    
 }

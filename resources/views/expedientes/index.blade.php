@@ -18,71 +18,69 @@
         </div>
     @endif
 
-        <div class="container">
-            <h5>Lista de Expedientes</h5>
-            <a href="{{route('create.expediente')}}" class="btn btn-primary btn-sm">Nuevo Expediente</a>
-            <br>
-            <br>
-            <div class="table-responsive">
-                <table id="expedientesTable" class="table table-striped table-bordered" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Acciones</th>
-                            <th>DNI/RUC</th>
-                            <th>NombreCompleto</th>
-                            <th>NombreCompleto_Representante</th>
-                            <th>Oficina</th>
-                            <th>Concepto</th>
-                            <th>Monto</th>
-                            <th>Expediente</th>
-                            <th>Fecha</th>
-                            <th>UIT</th>
-                            <th>Importe</th>
-                            <th>Resolución Admin</th>
-                            <th>Fecha Resolución Admin</th>
-                            <th>No Aperturado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($expedientes as $expediente)
-                        <tr>
-                            <td>{{ $expediente->id }}</td>
-                            <td>
-                                <a data-bs-toggle="tooltip" title="editar expediente" href="{{ route('edit.expediente', ['id' => $expediente->id]) }}" class="btn btn-warning btn-sm">
-                                    <i data-feather="edit-2"></i>
-                                </a>
-                                @if ($expediente->archivo)
-                                    <a data-bs-toggle="tooltip" title="Ver expediente escaneado" target="_blank" href="{{asset('storage/expedientes/'.$expediente->archivo)}}" class="btn btn-info btn-sm"><i data-feather="file-text"></i></a>
-                                    
-                                @endif
-                                <a onclick="cronograma('{{$expediente->id}}')" class="btn btn-success btn-sm" data-bs-toggle="tooltip" title="Ver cronograma"><i data-feather="calendar"></i></a>
-                                
-                            </td>
-                            <td>{{$expediente->dni}}{{$expediente->ruc}}</td>
-                            <td>{{ $expediente->nombre }}-{{ $expediente->apellidos }}</td>
-                            <td>{{ $expediente->nombre_rep }}-{{ $expediente->apellidos_rep }}</td>                     
-                            <td>{{ $expediente->direccion }}</td>
-                            <td>{{ $expediente->concepto }}</td>
-                            <td>{{ $expediente->monto }}</td>
-                            <td>{{ $expediente->expediente }}</td>
-                            <td>{{ $expediente->fecha }}</td>
-                            <td>{{ $expediente->uit }}</td>
-                            <td>{{ $expediente->importe }}</td>
-                            <td>{{ $expediente->resolucion_admin }}</td>
-                            <td>{{ $expediente->fecha_resolucion_admin }}</td>
-                            <td>{{ $expediente->noaperturado ? 'Sí' : 'No' }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+        
+    <h5>Lista de Expedientes</h5>
+    <a href="{{route('create.expediente')}}" class="btn btn-primary btn-sm">Nuevo Expediente</a>
+    <br>
+    <br>
+    <div class="table-responsive">
+        <table id="expedientesTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Acciones</th>
+                    <th>DNI/RUC</th>
+                    <th>NombreCompleto</th>
+                    <th>NombreCompleto_Representante</th>
+                    <th>Oficina</th>
+                    <th>Concepto</th>
+                    <th>Monto</th>
+                    <th>Expediente</th>
+                    <th>Fecha</th>
+                    <th>UIT</th>
+                    <th>Importe</th>
+                    <th>Resolución Admin</th>
+                    <th>Fecha Resolución Admin</th>
+                    <th>Aperturado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($expedientes as $expediente)
+                <tr>
+                    <td>{{ $expediente->id }}</td>
+                    <td>
+                        <a data-bs-toggle="tooltip" title="editar expediente" href="{{ route('edit.expediente', ['id' => $expediente->id]) }}" class="btn btn-warning btn-sm">
+                            <i data-feather="edit-2"></i>
+                        </a>
+                        <a onclick="cronograma('{{$expediente->id}}')" class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="Ver cronograma"><i data-feather="calendar"></i></a>
+                        <a onclick="vregistral('{{$expediente->id}}')" class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="Verificación Registral"><i class="fas fa-map-marked-alt"></i></a>
+                        @if ($expediente->archivo)
+                            <a data-bs-toggle="tooltip" title="Ver expediente escaneado" target="_blank" href="{{asset('storage/expedientes/'.$expediente->archivo)}}" class="btn btn-light btn-sm"><i data-feather="file-text"></i></a>
+                            
+                        @endif
+                    </td>
+                    <td>{{$expediente->dni}}{{$expediente->ruc}}</td>
+                    <td>{{ $expediente->nombre }}-{{ $expediente->apellidos }}</td>
+                    <td>{{ $expediente->nombre_rep }}-{{ $expediente->apellidos_rep }}</td>                     
+                    <td>{{ $expediente->direccion }}</td>
+                    <td>{{ $expediente->concepto }}</td>
+                    <td>{{ $expediente->monto }}</td>
+                    <td>{{ $expediente->expediente }}</td>
+                    <td>{{ $expediente->fecha }}</td>
+                    <td>{{ $expediente->uit }}</td>
+                    <td>{{ $expediente->importe }}</td>
+                    <td>{{ $expediente->resolucion_admin }}</td>
+                    <td>{{ $expediente->fecha_resolucion_admin }}</td>
+                    <td>{{ $expediente->noaperturado ? 'Sí' : 'No' }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
-        </div>
+        
     </div>
 </div>
-
-
 
 {{-- Modal Cronograma --}}
 <div class="modal fade" id="modalCronograma" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -129,9 +127,9 @@
                                 <th>ID</th>
                                 <th>ACCION</th>
                                 <th>FECHA INICIAL DE PAGO</th>
-                                <th>MONTO A PAGAR</th>
-                                <th>NÚMERO DE CUOTAS</th>
-                                <th>INTERÉS APLICADO</th>
+                                <th>MONTO PAGAR</th>
+                                <th>N°CUOTAS</th>
+                                <th>% APLICADO</th>
                                 <th>ESTADO</th>
                             </tr>
                             </thead>
@@ -204,9 +202,6 @@
         </div>
     </div>
 </div>
-
-
-
 
 {{-- Modal Pagos --}}
 <div class="modal fade" id="modalPagos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -285,7 +280,76 @@
     </div>
 </div>
 
+{{-- Modal Verificación Registral --}}
+<div class="modal fade" id="modalVregistral" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Verificación Registral</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+                <div class="modal-body">
+                    <form id="formVregistral" enctype="multipart/form-data">@csrf
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" name="id_expediente_vr" id="id_expediente_vr" readonly hidden>
+                                <label for="prescrito">Prescrito</label>
+                                <select name="prescrito" id="prescrito" class="form-select form-select-sm" required>
+                                    <option value="">--Seleccione--</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="estado">Estado</label>
+                                <textarea name="estado_vregistral" id="estado_vregistral" class="form-control form-control-sm" maxlength="250" required></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="observaciones">Observacion</label>
+                                <textarea name="observaciones" id="observaciones" class="form-control from-control-sm" maxlength="250">-</textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="content" style="text-align: center">
+                            <button type="submit" class="btn btn-light btn-sm btnAgregarVregistral"><i class="fas fa-plus"></i> Agregar Verificación Registral</button>
+                        </div>
+                        
+                    </form>
+                    
+                    <div class="table-responsive">
+                        <br>
+                        <table id="dtVregistral" class="table table-striped table-bordered" style="width:100%">                            
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>ACCIÓN</th>
+                                <th>PRESCRITO</th>
+                                <th>ESTADO</th>
+                                <th>OBSERVACIONES</th>
+                                <th>FECHA REGISTRO</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir de V.Registral</button>
+                    {{-- <button type="submit" class="btn btn-primary">Guardar</button> --}}
+                </div>
+
+            
+        </div>
+    </div>
+</div>
+
+@include('modals.confirmar_eliminar')
 
 @endsection
 
@@ -413,6 +477,7 @@
                 dataType: "json",
                 success: function (response) {
                     llenaDataTablePagos(id_cronograma);
+                    llenarDataTableCronograma($("#id_expediente").val())
                 }
             });
         }
@@ -457,6 +522,62 @@
             });
         }
 
+        function vregistral(id) {
+            $("#id_expediente_vr").val(id);
+            $("#modalVregistral").modal('show');
+            llenaDtVregistral();
+        }
+
+        
+
+        $(document).on("click",".btnAgregarVregistral",function (e) { 
+            let prescrito=$("#prescrito").val();
+            let estado_vregistral=$("#estado_vregistral").val();
+            
+            if (prescrito.trim()==='' || estado_vregistral.trim()==='') {
+                console.log("ambos vacios");
+            }else{
+                console.log("entro a registrar");
+                e.preventDefault();
+                ds=$("#formVregistral").serialize();
+                $.ajax({
+                    type: "POST",
+                    url: "/vregistral/store",
+                    data: ds,
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response.data)
+                        llenaDtVregistral();
+                    }
+                });
+            }
+         })
+        
+
+        function llenaDtVregistral() {
+            var id_expediente= $("#id_expediente_vr").val();
+            $.ajax({
+                type: "GET",
+                url: "/vregistral/index/"+id_expediente,
+                dataType: "json",
+                success: function (response) {
+                    $("#dtVregistral tbody").html("");
+                    response.data.forEach(element => {
+                        $("#dtVregistral tbody").append("<tr>"+
+                            "<td>" + element.id+"</td>"+
+                            "<td>" + "<a class='btn btn-danger btn-sm btnEliminarVregistral'><i class='fas fa-trash-alt'></i></a>"+"</td>"+
+                            "<td>" + element.prescrito+"</td>"+
+                            "<td>" + element.estado+"</td>"+
+                            "<td>" + (element.observaciones ? element.observaciones : '') + "</td>"+    
+                            "<td>" + element.created_at+"</td>"+
+    
+                            +"</tr")
+                        
+                    });
+                }
+            });
+        }
+
         $("#btnAgregarPago").on("click",function (e) {
             var monto=$("#monto").val();
             var archivo=$("#archivo").val();
@@ -468,6 +589,39 @@
             }
         })
 
+        $(document).on("click",".btnEliminarVregistral",function (e) { 
+            e.preventDefault();
+            fila = $(this).closest("tr");
+            id = (fila).find('td:eq(0)').text();
+            $("#id_registro_eliminar").val(id);
+            $("#modalEliminar").modal('show');
+         })
+
+         function btnSiEliminar() {
+            id=$("#id_registro_eliminar").val();
+            $.ajax({
+                type: "GET",
+                url: "/vregistral/destroy/"+id,
+                dataType: "json",
+                success: function (response) {
+                    llenaDtVregistral();
+                }
+            });
+            $("#modalEliminar").modal('hide');
+         }
 
     </script>
+    <script src="../../../assets/js/plugins/jquery.dataTables.min.js"></script>
+    <script src="../../../assets/js/plugins/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#expedientesTable').DataTable({
+                columnDefs: [
+                    { width: '200px', targets: 1 }
+                ],
+                fixedColumns: true
+            });
+        });
+    </script>
+    
 @endsection

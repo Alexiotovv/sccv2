@@ -19,7 +19,7 @@
             </div>
         @endif
 
-        <div class="container mt-5">
+        
             <h5 class="mb-4">Lista de Ejecutados</h5>
             <a href="{{route('create.ejecutado')}}" class="btn btn-primary btn-sm">Nuevo Ejecutado</a>
             <div class="table-responsive">
@@ -77,7 +77,7 @@
             <div class="d-flex justify-content-center mt-4">
                 {{ $deudores->links('pagination::bootstrap-5') }}
             </div>
-        </div>
+        
 
     </div>
 </div>
@@ -116,4 +116,19 @@
         }
         
     </script>
+
+
+
+<script src="../../../assets/js/plugins/jquery.dataTables.min.js"></script>
+<script src="../../../assets/js/plugins/dataTables.bootstrap4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#deudoresTable').DataTable({
+            columnDefs: [
+                { width: '200px', targets: 1 }
+            ],
+            fixedColumns: true
+        });
+    });
+</script>
 @endsection
