@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\pagos;
 use App\Models\cronogramas;
 use Validator;
@@ -124,24 +125,34 @@ class PagosController extends Controller
     }
 
     public function destroy($id){
-        $obj = pagos::find($id);
-    
-        if (!$obj) {
-            return response()->json(['message' => 'error', 'data' => 'Registro no encontrado'], 204);
+
+        $user = Auth::user();
+            
+        // Verificar el rol del usuario y redirigir según el rol
+        if ($user->role === 0) {
+
+            $obj = pagos::find($id);
+        
+            if (!$obj) {
+                return response()->json(['message' => 'error', 'data' => 'Registro no encontrado'], 204);
+            }
+        
+            $obj->delete();
+            
+            //recalculamos el estado de cronograma
+            $id_cronograma = $obj->id_cronograma;
+            $estado_cronograma = $this->calcularEstadoCronograma($id_cronograma); // Asegúrate de llamar correctamente a la función
+            
+            if (!$estado_cronograma) {
+                $cronograma = cronogramas::findOrFail($id_cronograma);
+                $cronograma->estado = false; // Actualiza el estado del cronograma
+                $cronograma->save(); // Guarda los cambios en la base de datos
+            }
+            return response()->json(['message' => 'success', 'data' => 'Registro Eliminado'], 200);
+        }else {
+            return response()->json(['message' => 'noautorizado', 'data' => 'No autorizado para eliminar'], 200);
         }
 
-        $obj->delete();
-        
-        //recalculamos el estado de cronograma
-        $id_cronograma = $obj->id_cronograma;
-        $estado_cronograma = $this->calcularEstadoCronograma($id_cronograma); // Asegúrate de llamar correctamente a la función
-        
-        if (!$estado_cronograma) {
-            $cronograma = cronogramas::findOrFail($id_cronograma);
-            $cronograma->estado = false; // Actualiza el estado del cronograma
-            $cronograma->save(); // Guarda los cambios en la base de datos
-        }
-        return response()->json(['message' => 'success', 'data' => 'Registro Eliminado'], 200);
     }
 
 }

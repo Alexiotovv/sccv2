@@ -1,4 +1,14 @@
 @extends('bases.base')
+@section('css')
+#total_pagado {
+    display: inline;
+  }
+  
+  strong {
+    display: inline;
+  }
+  
+@endsection
 @section('content')
 <div class="card">
     <div class="card-body">
@@ -249,6 +259,10 @@
                     </form>
                     
                     <div class="table-responsive">
+                        <i class="fas fa-money-check-alt">
+                            <strong>Total Pagado S/<span id="total_pagado"></span></strong>
+                          </i>
+                          
                         <br>
                         <table id="dtPagos" class="table table-striped table-bordered" style="width:100%">                            
                             <thead>
@@ -492,8 +506,10 @@
                 success: function(response) {
                     $("#dtPagos tbody").html("");
                     var numero = 0;
+                    var total_pagado = 0
+
                     response.data.forEach(element => {
-                        // numero += 1;
+                        total_pagado += parseFloat(element.monto)
                         var archivo = '';
                         var estado = false;
                         if (element.archivo) {
@@ -523,6 +539,7 @@
                             "</tr>"
                         );
                     });
+                    $("#total_pagado").text(total_pagado);
                 }
             });
         }
@@ -637,7 +654,11 @@
                     url: "/pagos/destroy/"+id,
                     dataType: "json",
                     success: function (response) {
-                        llenaDataTablePagos(id_cronograma);
+                        if (response.message=='noautorizado') {
+                            alert(response.message +" "+ response.data)
+                        }else{
+                            llenaDataTablePagos(id_cronograma);
+                        }
                     }
                 });
             }
