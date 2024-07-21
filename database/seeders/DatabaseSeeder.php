@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'name'=>'admin',
             'email' => 'admin@gmail.com',
-            'password' => Hash::make('123456'),
+            'password' => Hash::make('#1984'),
             'status'=>1,
         ]);
         DB::table('direcciones')->insert([
@@ -128,6 +128,19 @@ class DatabaseSeeder extends Seeder
             
         ]);
 
+
+        DB::statement("
+            CREATE OR REPLACE VIEW sp_scc_pagos AS
+            SELECT 
+                YEAR(pagos.fecha) AS anho,
+                MONTH(pagos.fecha) AS mes_numero,
+                MONTHNAME(pagos.fecha) AS mes_nombre,
+                SUM(pagos.monto) AS total_pagos
+            FROM pagos
+            WHERE pagos.fecha >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+            GROUP BY YEAR(pagos.fecha), MONTHNAME(pagos.fecha), MONTH(pagos.fecha)
+            ORDER BY YEAR(pagos.fecha), MONTH(pagos.fecha) DESC
+        ");
 
 
     }

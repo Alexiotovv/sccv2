@@ -142,7 +142,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>ACCION</th>
-                                <th>FECHA INICIAL DE PAGO</th>
+                                <th>F. INICIAL PAGO</th>
                                 <th>MONTO PAGAR</th>
                                 <th>N°CUOTAS</th>
                                 <th>% APLICADO</th>
@@ -188,12 +188,12 @@
                             </div>
                             <div class="col-md-4">
                                 <label for="interes_aplicado">Interes Aplicado %</label>
-                                <input type="number" step="0.01" onkeyup="change_interes_aplicado()" value="0.00" id="interes_aplicado" name="interes_aplicado" class="form-control form-control-sm" required>
+                                <input type="number" onchange="change_interes_aplicado()" onkeyup="change_interes_aplicado()" value="0.00" id="interes_aplicado" name="interes_aplicado" class="form-control form-control-sm" required>
                             </div>
                             <div class="col-md-4">
                                 <input type="text" name="id_expediente" id="id_expediente" hidden>
                                 <label for="numero_cuotas">Número de Cuotas</label>
-                                <input type="number" name="numero_cuotas" onkeyup="change_numero_cuotas()" id="numero_cuotas" value="1" class="form-control form-control-sm" required>
+                                <input type="number" name="numero_cuotas" onchange="change_numero_cuotas()" onkeyup="change_numero_cuotas()" id="numero_cuotas" value="1" class="form-control form-control-sm" required>
                             </div>
                             <div class="col-md-4">
                                 <label for="monto_cuota">Monto de Cuota</label>
@@ -295,7 +295,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir de Pagos</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Salir de Pagos</button>
                     {{-- <button type="submit" class="btn btn-primary">Guardar</button> --}}
                 </div>
 

@@ -352,7 +352,11 @@ class DeudoresController extends Controller
 
     public function ficha($id){
         $deudor= deudores::find($id);
-        $expediente=expedientes::where('id_deudores',$id)->get();
+        $expediente=DB::table('expedientes')
+        ->leftjoin('direcciones','direcciones.id','=','expedientes.id_direcciones')
+        ->where('expedientes.id_deudores','=',$id)
+        ->select('expedientes.*','direcciones.nombre')
+        ->get();
         $cronogramas = cronogramas::whereIn('id_expedientes', $expediente->pluck('id'))->get();
         $pagos = pagos::whereIn('id_cronograma',$cronogramas->pluck('id'))->get();
         $vregistral=vregistrals::whereIn('id_expedientes',$expediente->pluck('id'))->get();

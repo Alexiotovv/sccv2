@@ -105,7 +105,7 @@
                                 <input type="file" name="archivo_firma" id="archivo_firma" class="form-control form-control-sm" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="estado">Esstado</label>
+                                <label for="estado">Estado</label>
                                 <select name="estado" id="estado" class="form-select form-select-sm">
                                     <option value="1" selected>Activo</option>
                                     <option value="0">Inactivo</option>

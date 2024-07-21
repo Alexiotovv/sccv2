@@ -80,10 +80,10 @@
             </div>
             <form action="{{route('login')}}" method="POST">@csrf
                 <div class="mb-3">
-                <input type="email" class="form-control" name="email" id="email" placeholder="Correo" value="alex@gmail.com">
+                <input type="email" class="form-control" name="email" id="email" placeholder="Correo">
                 </div>
                 <div class="mb-3">
-                <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña" value="123456">
+                <input type="password" name="password" class="form-control" id="password" placeholder="Contraseña">
                 </div>
                 <div class="d-flex mt-1 justify-content-between align-items-center">
                 <div class="form-check">

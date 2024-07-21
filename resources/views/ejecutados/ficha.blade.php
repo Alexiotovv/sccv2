@@ -71,6 +71,7 @@
                     <h5>Expediente</h5>
                     <p>N°: {{$expediente->expediente}}</p>
                     <p>Concepto: {{$expediente->concepto}}</p>
+                    <p>Oficina Sancionadora: {{$expediente->nombre}}</p>
                     <p>Monto: {{$expediente->monto}}</p>
                     <p>Fecha: {{$expediente->fecha}}</p>
                     <p>UIT: {{$expediente->uit}}</p>
@@ -150,44 +151,44 @@
                                         </table>
                                     {{-- </div> --}}
                                     <h5>Pagos Realizados</h5>
-                                    @foreach ($pagos as $p)
-                                        @if ($p->id_cronograma==$cro->id)
-                                            {{-- <div class="table-responsive"> --}}
-                                                <table id="pagosTable" class="table table-striped table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Id</th>
-                                                            <th>Monto</th>
-                                                            <th>Método</th>
-                                                            <th>Estado</th>
-                                                            <th>Fecha</th>
-                                                            <th>Hora</th>
-                                                            <th>Archivo</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>{{ $p->id }}</td>
-                                                            <td>{{ $p->monto }}</td>
-                                                            <td>{{ $p->metodo }}</td>
-                                                            <td>
-                                                                @if ($p->estado==1)
-                                                                    <p>PENDIENTE({{$p->estado}})</p>
-                                                                @elseif($p->estado==2)
-                                                                    <p>COMPLETO({{$p->estado}})</p>
-                                                                @elseif($p->estado==3)
-                                                                    <p>PARCIALMENTE PAGADO({{$p->estado}})</p>
-                                                                @endif
-                                                            </td>
-                                                            <td>{{ $p->fecha }}</td>
-                                                            <td>{{ $p->hora }}</td>
-                                                            <td>{{ $p->archivo }}ssssssssssssssssssssssssssss</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                    {{-- <div class="table-responsive"> --}}
+                                        <table id="pagosTable" class="table table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Monto</th>
+                                                    <th>Método</th>
+                                                    <th>Estado</th>
+                                                    <th>Fecha</th>
+                                                    <th>Hora</th>
+                                                    <th>Archivo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($pagos as $p)
+                                                        @if ($p->id_cronograma==$cro->id)
+                                                    <tr>
+                                                        <td>{{ $p->id }}</td>
+                                                        <td>{{ $p->monto }}</td>
+                                                        <td>{{ $p->metodo }}</td>
+                                                        <td>
+                                                            @if ($p->estado==1)
+                                                                <p>PENDIENTE({{$p->estado}})</p>
+                                                            @elseif($p->estado==2)
+                                                                <p>COMPLETO({{$p->estado}})</p>
+                                                            @elseif($p->estado==3)
+                                                                <p>PARCIALMENTE PAGADO({{$p->estado}})</p>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $p->fecha }}</td>
+                                                        <td>{{ $p->hora }}</td>
+                                                        <td>{{ $p->archivo }}</td>
+                                                    </tr>
+                                                    @endif
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                             {{-- </div> --}}
-                                        @endif
-                                    @endforeach
                                     <hr>
                             @endif
                             

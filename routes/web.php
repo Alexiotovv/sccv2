@@ -33,8 +33,10 @@ Route::get('/',function(){
 
 Route::middleware('auth:api')->get('/check-auth', [App\Http\Controllers\AuthController::class, 'checkAuth']);
 
-//Home
+//Home y Graficos
 Route::get('/home', [HomeController::class, 'index'])->middleware(['auth'])->name('home');
+Route::get('/graficos/datos', [HomeController::class,'datos'])->name('graficos.datos');
+
 
 //Register and Login user
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -108,6 +110,9 @@ Route::get('/oficinas/index', [DireccionesController::class,'index'])->name('ind
 Route::post('/oficinas/update', [DireccionesController::class,'update'])->name('update.oficinas');
 Route::post('/oficinas/store', [DireccionesController::class,'store'])->name('store.oficinas');
 Route::post('/oficinas/destroy', [DireccionesController::class,'destroy'])->name('destroy.oficinas');
+
+
+
 
 //Provincia,Distritos, Regiones
 Route::get('/distritos', [RegionesController::class,'index_distritos']);

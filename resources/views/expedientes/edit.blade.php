@@ -92,10 +92,10 @@
                 <input type="number" step="0.01" class="form-control form-control-sm" id="uit" name="uit" placeholder="UIT del expediente" value="{{$expediente->uit}}" required>
             </div>
     
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <label for="importe" class="form-label">Importe</label>
                 <input type="number" step="0.01" class="form-control form-control-sm" id="importe" name="importe" placeholder="Importe del expediente" value="{{$expediente->importe}}" required>
-            </div>
+            </div> --}}
     
             <div class="col-md-3">
                 <label for="resolucion_admin" class="form-label">Resolución Administrativa</label>

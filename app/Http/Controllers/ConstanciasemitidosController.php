@@ -15,6 +15,7 @@ class ConstanciasemitidosController extends Controller
      */
 
      public function index(){
+        $datos_constancias=constanciasdatos::all()->first();
         $constancias_emitidos=DB::table('constanciasemitidos')
         ->leftjoin('expedientes','expedientes.id','=','constanciasemitidos.idExpediente')
         ->select(
@@ -27,7 +28,7 @@ class ConstanciasemitidosController extends Controller
         )
         ->get();
         
-        return view('constancias.index',compact('constancias_emitidos'));
+        return view('constancias.index',compact('constancias_emitidos','datos_constancias'));
     }
 
 
