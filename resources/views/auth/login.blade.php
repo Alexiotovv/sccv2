@@ -48,22 +48,24 @@
   </div>
   <!-- [ Pre-loader ] End -->
   
-  
-@if(session()->has('mensaje'))
+<div class="row" style="align-items: center;justify-content: center;">
+
+  @if(session()->has('mensaje'))
   <div class="col-sm-4">
-      <div class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">
-          <div class="d-flex align-items-center">
-              <div class="font-35 text-success"><i class='bx bxs-check-circle'></i>
-              </div>
-              <div class="ms-3">
-                  <h6 class="mb-0 text-success">Mensaje</h6>
-                  <div>{{Session::get('mensaje')}}</div>
-              </div>
-          </div>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="alert border-0 border-start border-5 border-danger alert-dismissible fade show py-2">
+      <div class="d-flex align-items-center">
+        <div class="font-35 text-danger"><i class='bx bxs-check-circle'></i>
+        </div>
+        <div class="ms-3">
+          <h6 class="mb-0 text-danger">Mensaje</h6>
+          <div>{{Session::get('mensaje')}}</div>
+        </div>
       </div>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
   </div>
-@endif
+  @endif
+</div>
 
   <div class="auth-main v1">
     <div class="auth-wrapper">
@@ -71,6 +73,7 @@
         <div class="card my-5">
           <div class="card-body">
             <div class="text-center">
+                
               <img src="../../../assets/images/authentication/circle_logo_gorel.png" alt="images" class="img-fluid mb-3">
               {{-- <h4 class="f-w-500 mb-1">Login with your email</h4>
               <p class="mb-3">Don't have an Account? <a href="register-v1.html" class="link-primary ms-1">Create Account</a></p> --}}

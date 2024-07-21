@@ -41,7 +41,6 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
 //Usuarios
 Route::get('/users', [UserController::class,'users'])->middleware(['auth'])->name('users');
 Route::get('/users/edit/{id}', [UserController::class,'edit'])->middleware(['auth'])->name('usuario.edit');
@@ -61,6 +60,7 @@ Route::get('/ejecutado/edit/{id}', [DeudoresController::class,'edit'])->middlewa
 Route::post('/ejecutado/update', [DeudoresController::class,'update'])->middleware(['auth'])->name('update.ejecutado');
 Route::post('/ejecutado/destroy', [DeudoresController::class,'destroy'])->middleware(['auth'])->name('destroy.ejecutado');
 Route::get('/ejecutado/show/{doc}', [DeudoresController::class,'show'])->middleware(['auth'])->name('show.ejecutado');
+Route::get('/ejecutado/ficha/{id}', [DeudoresController::class,'ficha'])->middleware(['auth'])->name('ficha.ejecutado');
 
 //Expedientes
 Route::get('/expedientes/index/', [ExpedientesController::class,'index'])->middleware(['auth'])->name('index.expedientes');
@@ -75,6 +75,7 @@ Route::get('/cronogramas/index/{expediente_id}', [CronogramasController::class,'
 Route::post('/cronogramas/store/', [CronogramasController::class,'store'])->name('store.cronograma');
 Route::put('/cronogramas/update/{cronograma_id}', [CronogramasController::class,'update'])->middleware(['auth'])->name('update.cronograma');
 Route::get('/cronogramas/show/{expediente_id}', [CronogramasController::class,'show'])->middleware(['auth'])->name('show.cronograma');
+Route::get('/cronogramas/destroy/{id}', [CronogramasController::class,'destroy'])->middleware(['auth'])->name('destroy.cronograma');
 
 //Pagos
 Route::post('/pagos/store/', [PagosController::class,'store'])->middleware(['auth'])->name('store.pagos');
@@ -102,6 +103,11 @@ Route::middleware('jwt.auth')->put('/vregistral/update/{vregistral_id}', [Vregis
 Route::get('/vregistral/index/{expediente_id}', [VregistralsController::class,'index']);
 Route::get('/vregistral/destroy/{id}', [VregistralsController::class,'destroy']);
 
+//Oficinas
+Route::get('/oficinas/index', [DireccionesController::class,'index'])->name('index.oficinas');
+Route::post('/oficinas/update', [DireccionesController::class,'update'])->name('update.oficinas');
+Route::post('/oficinas/store', [DireccionesController::class,'store'])->name('store.oficinas');
+Route::post('/oficinas/destroy', [DireccionesController::class,'destroy'])->name('destroy.oficinas');
 
 //Provincia,Distritos, Regiones
 Route::get('/distritos', [RegionesController::class,'index_distritos']);

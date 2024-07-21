@@ -120,7 +120,7 @@ class ExpedientesController extends Controller
             'expediente' => 'required|string|max:250',
             'fecha' => 'required|date',
             'uit' => 'required|numeric',
-            'importe' => 'required|numeric',
+            // 'importe' => 'required|numeric',
             'fecha_resolucion_admin' => 'required|date',
         ];
 
@@ -131,8 +131,8 @@ class ExpedientesController extends Controller
             'expediente.required' => 'El campo expediente es obligatorio.',
             'expediente.max' => 'El campo expediente no debe exceder los 250 caracteres.',
             'fecha.date' => 'El campo fecha debe ser una fecha válida.',
-            'importe.required' => 'El campo importe es obligatorio.',
-            'importe.numeric' => 'El campo importe debe ser un número.',
+            // 'importe.required' => 'El campo importe es obligatorio.',
+            // 'importe.numeric' => 'El campo importe debe ser un número.',
             'fecha_resolucion_admin.required' => 'El campo fecha de resolución administrativa es obligatorio.',
             'fecha_resolucion_admin.date' => 'El campo fecha de resolución administrativa debe ser una fecha válida.',
             
@@ -153,7 +153,7 @@ class ExpedientesController extends Controller
         $obj->expediente=request('expediente');
         $obj->fecha=request('fecha');
         $obj->uit=request('uit');
-        $obj->importe=request('importe');
+        $obj->importe=0.00;
         $obj->resolucion_admin=request('resolucion_admin');
         $obj->fecha_resolucion_admin=request('fecha_resolucion_admin');
         $obj->noaperturado=$administrado;
@@ -262,7 +262,7 @@ class ExpedientesController extends Controller
             'expediente' => 'required|string|max:250',
             'fecha' => 'required|date',
             'uit' => 'required|numeric',
-            'importe' => 'required|numeric',
+            // 'importe' => 'required|numeric',
             'fecha_resolucion_admin' => 'required|date',
         ];
 
@@ -273,8 +273,8 @@ class ExpedientesController extends Controller
             'expediente.required' => 'El campo expediente es obligatorio.',
             'expediente.max' => 'El campo expediente no debe exceder los 250 caracteres.',
             'fecha.date' => 'El campo fecha debe ser una fecha válida.',
-            'importe.required' => 'El campo importe es obligatorio.',
-            'importe.numeric' => 'El campo importe debe ser un número.',
+            // 'importe.required' => 'El campo importe es obligatorio.',
+            // 'importe.numeric' => 'El campo importe debe ser un número.',
             'fecha_resolucion_admin.required' => 'El campo fecha de resolución administrativa es obligatorio.',
             'fecha_resolucion_admin.date' => 'El campo fecha de resolución administrativa debe ser una fecha válida.',
         ];
@@ -293,7 +293,7 @@ class ExpedientesController extends Controller
         $obj->expediente=request('expediente');
         $obj->fecha=request('fecha');
         $obj->uit=request('uit');
-        $obj->importe=request('importe');
+        $obj->importe=0.00;
         $obj->resolucion_admin=request('resolucion_admin');
         $obj->fecha_resolucion_admin=request('fecha_resolucion_admin');
         $obj->noaperturado=$administrado;

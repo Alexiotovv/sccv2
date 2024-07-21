@@ -42,7 +42,7 @@ class ConstanciasdatosController extends Controller
         $datos=new constanciasdatos();
         $datos->contenido=request('contenido');
         $datos->descripcion_correlativo=request('descripcion_correlativo');
-
+        $datos->estado=request('estado');
 
         if ($request->hasFile('archivo_encabezado')){
             $file = request('archivo_encabezado')->getClientOriginalName();//archivo recibido

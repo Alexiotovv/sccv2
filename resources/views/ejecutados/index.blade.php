@@ -5,12 +5,12 @@
     <div class="card-body">
         @if(session()->has('mensaje'))
             <div class="col-sm-4">
-                <div class="alert border-0 border-start border-5 border-success alert-dismissible fade show py-2">
+                <div class="alert border-0 border-start border-5 border-{{Session::get('color')}} alert-dismissible fade show py-2">
                     <div class="d-flex align-items-center">
-                        <div class="font-35 text-success"><i class='bx bxs-check-circle'></i>
+                        <div class="font-35 text-{{Session::get('color')}}"><i class='bx bxs-check-circle'></i>
                         </div>
                         <div class="ms-3">
-                            <h6 class="mb-0 text-success">Mensaje</h6>
+                            <h6 class="mb-0 text-{{Session::get('color')}}">Mensaje</h6>
                             <div>{{Session::get('mensaje')}}</div>
                         </div>
                     </div>
@@ -49,11 +49,12 @@
                         <tr>
                             <td>{{ $deudor->id_deudor }}</td>
                             <td>
-                                <a href="{{route('edit.ejecutado',$deudor->id_deudor)}}" class="btn btn-warning btn-sm">
-                                    <i data-feather="edit"></i>
+                                <a href="{{route('ficha.ejecutado',$deudor->id_deudor)}}" class="btn btn-light btn-sm"><i class="fas fa-eye"></i></a>
+                                <a href="{{route('edit.ejecutado',$deudor->id_deudor)}}" class="btn btn-light btn-sm">
+                                    <i class="fas fa-edit"></i>
                                 </a>
                                 @if(auth()->user()->role == 0)
-                                    <a onclick="eliminarEjecutado({{$deudor->id_deudor}})" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                                    <a onclick="eliminarEjecutado({{$deudor->id_deudor}})" class="btn btn-light btn-sm"><i class="fas fa-trash"></i></a>
                                 @endif
                             </td>
                             <td>{{ $deudor->tipo_persona }}</td>

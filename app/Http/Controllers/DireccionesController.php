@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\direcciones;
+use App\Models\expedientes;
 use Illuminate\Http\Request;
 
 class DireccionesController extends Controller
@@ -17,8 +18,8 @@ class DireccionesController extends Controller
      */
     public function index()
     {
-        $obj= direcciones::all()->select('id','nombre');
-        return response()->json(['status'=>'success','data'=>$obj],200);
+        $oficinas= direcciones::all();
+        return view('oficinas.index',compact('oficinas'));
     }
 
     /**
@@ -29,7 +30,7 @@ class DireccionesController extends Controller
         $obj = new direcciones();
         $obj->nombre=request('nombre');
         $obj->save();
-        return response()->json(['status'=>'success','message'=>'Direccion Registrada'],200);
+        return redirect()->route('index.oficinas')->with('mensaje','Oficina Registrada');
     }
 
     /**
@@ -51,19 +52,30 @@ class DireccionesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update($id)
-    {
+    public function update(Request $request)
+    {  
+        $id = request('idoficina');
         $obj = direcciones::findOrFail($id);
         $obj->nombre=request('nombre');
         $obj->save();
-        return response()->json(['status'=>'success','message'=>'Direccion Actualizada'],200);
+        return redirect()->route('index.oficinas')->with('mensaje','Oficina Actualizada');
+        
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(regiones $regiones)
+    public function destroy(Request $request)
     {
-        //
+        $id = request('idoficina_eliminar');
+        $datos_en_direccion=expedientes::where('id_direcciones',$id)->first();
+        if ($datos_en_direccion){
+            return redirect()->route('index.oficinas')->with('mensaje','El registro no se puede eliminar, contiene datos!')->with('color','danger');
+        }
+        $oficinas = direcciones::findOrFail($id);
+        $oficinas->delete();
+        
+        return redirect()->route('index.oficinas')->with('mensaje','Registro Eliminado!')->with('color','success');
+
     }
 }

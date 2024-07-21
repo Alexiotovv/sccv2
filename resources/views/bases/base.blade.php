@@ -96,6 +96,7 @@
                   ><span class="pc-arrow"><i data-feather="chevron-right"></i></span
                 ></a>
                 <ul class="pc-submenu">
+                  <li class="pc-item"><a class="pc-link" href="{{route('home')}}">Home</a></li>
                   <li class="pc-item"><a class="pc-link" href="{{route('index.expedientes')}}">Expediente</a></li>
                   <li class="pc-item"><a class="pc-link" href="{{route('index.ejecutado')}}">Ejecutados</a></li>
                   
@@ -106,14 +107,19 @@
 
               <li class="pc-item pc-hasmenu">
                 <a href="#!" class="pc-link"
-                  ><span class="pc-micon"> <i class="ph-duotone ph-layout"></i></span><span class="pc-mtext">Configuraciones</span
+                  ><span class="pc-micon"> <i class="ph-duotone ph-layout"></i></span><span class="pc-mtext">Gestión</span
                   ><span class="pc-arrow"><i data-feather="chevron-right"></i></span
                 ></a>
                 <ul class="pc-submenu">
                   @if(auth()->user()->role == 0)
                     <li class="pc-item"><a class="pc-link" href="{{route('users')}}">Usuarios</a></li>
                   @endif
+                  <li class="pc-item"><a class="pc-link" href="{{route('index.oficinas')}}">Oficinas</a></li>
                 </ul>
+                
+                
+
+
                 <ul class="pc-submenu">
                 </ul>
               </li>

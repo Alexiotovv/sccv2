@@ -29,7 +29,7 @@
             <p hidden id="MensajeBusqueda" style="color: red"></p>
             <div class="col-md-4 d-flex align-items-end">
                 <div class="input-group">
-                    <input type="text" class="form-control" id="doc" name="doc" placeholder="dni/ruc" value="{{$expediente->dni}}{{$expediente->ruc}}" required readonly>
+                    <input type="text" class="form-control form-control-sm" id="doc" name="doc" placeholder="dni/ruc" value="{{$expediente->dni}}{{$expediente->ruc}}" required readonly>
                     {{-- <button onclick="btnBuscarEjecutado()" class="btn btn-primary" type="button">Buscar</button> --}}
                 </div>
             </div>
@@ -37,21 +37,21 @@
             
             <div class="col-md-4">
                 <label for="nombre" class="form-label">Nombre/Razon</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre del deudor" value="{{$expediente->nombre}} {{$expediente->razon}}" readonly>
+                <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre del deudor" value="{{$expediente->nombre}} {{$expediente->razon}}" readonly>
             </div>
     
             <div class="col-md-4">
                 <label for="apellidos" class="form-label">Apellidos</label>
-                <input type="text" class="form-control" id="apellidos" name="apellidos" placeholder="Apellidos del deudor" value="{{$expediente->apellidos}}" readonly>
+                <input type="text" class="form-control form-control-sm" id="apellidos" name="apellidos" placeholder="Apellidos del deudor" value="{{$expediente->apellidos}}" readonly>
             </div>
     
             <div class="col-md-6">
                 <label for="" class="form-label">Dirección</label>
-                <input type="text" class="form-control" id="direccion" placeholder="Dirección del deudor" value="{{$expediente->domicilio}}" readonly>
+                <input type="text" class="form-control form-control-sm" id="direccion" placeholder="Dirección del deudor" value="{{$expediente->domicilio}}" readonly>
             </div>
             <div class="col-md-6">
                 <label for="" class="form-label">Oficina Sancionadora</label>
-                <select name="oficina" id="oficina" class="form-select" required>
+                <select name="oficina" id="oficina" class="form-select form-select-sm" required>
                     <option value="">--Seleccion Oficina--</option>
                     @foreach ($oficinas as $o)
                         @if ($expediente->id_direccion==$o->id)
@@ -69,42 +69,42 @@
             <h5>Datos del Expediente</h5>
             <div class="col-md-6">
                 <label for="concepto" class="form-label">Concepto</label>
-                <input type="text" class="form-control" id="concepto" name="concepto" placeholder="Concepto del expediente" value="{{$expediente->concepto}}" required>
+                <input type="text" class="form-control form-control-sm" id="concepto" name="concepto" placeholder="Concepto del expediente" value="{{$expediente->concepto}}" required>
             </div>
     
             <div class="col-md-3">
                 <label for="monto" class="form-label">Monto</label>
-                <input type="number" class="form-control" id="monto" name="monto" placeholder="Monto del expediente" value="{{$expediente->monto}}" required>
+                <input type="number" class="form-control form-control-sm" id="monto" name="monto" placeholder="Monto del expediente" value="{{$expediente->monto}}" required>
             </div>
     
             <div class="col-md-3">
                 <label for="expediente" class="form-label">Número de Expediente</label>
-                <input type="text" class="form-control" id="expediente" name="expediente" placeholder="Número de expediente" value="{{$expediente->expediente}}" required>
+                <input type="text" class="form-control form-control-sm" id="expediente" name="expediente" placeholder="Número de expediente" value="{{$expediente->expediente}}" required>
             </div>
     
             <div class="col-md-3">
                 <label for="fecha" class="form-label">Fecha del Expediente</label>
-                <input type="date" class="form-control" id="fecha" name="fecha" value="{{$expediente->fecha}}" required>
+                <input type="date" class="form-control form-control-sm" id="fecha" name="fecha" value="{{$expediente->fecha}}" required>
             </div>
     
             <div class="col-md-3">
                 <label for="uit" class="form-label">UIT</label>
-                <input type="number" step="0.01" class="form-control" id="uit" name="uit" placeholder="UIT del expediente" value="{{$expediente->uit}}" required>
+                <input type="number" step="0.01" class="form-control form-control-sm" id="uit" name="uit" placeholder="UIT del expediente" value="{{$expediente->uit}}" required>
             </div>
     
             <div class="col-md-3">
                 <label for="importe" class="form-label">Importe</label>
-                <input type="number" step="0.01" class="form-control" id="importe" name="importe" placeholder="Importe del expediente" value="{{$expediente->importe}}" required>
+                <input type="number" step="0.01" class="form-control form-control-sm" id="importe" name="importe" placeholder="Importe del expediente" value="{{$expediente->importe}}" required>
             </div>
     
             <div class="col-md-3">
                 <label for="resolucion_admin" class="form-label">Resolución Administrativa</label>
-                <input type="text" class="form-control" id="resolucion_admin" name="resolucion_admin" placeholder="Resolución administrativa" value="{{$expediente->resolucion_admin}}" maxlength="250">
+                <input type="text" class="form-control form-control-sm" id="resolucion_admin" name="resolucion_admin" placeholder="Resolución administrativa" value="{{$expediente->resolucion_admin}}" maxlength="250">
             </div>
     
             <div class="col-md-3">
                 <label for="fecha_resolucion_admin" class="form-label">Fecha de Resolución Administrativa</label>
-                <input type="date" class="form-control" id="fecha_resolucion_admin" name="fecha_resolucion_admin" value="{{$expediente->fecha_resolucion_admin}}">
+                <input type="date" class="form-control form-control-sm" id="fecha_resolucion_admin" name="fecha_resolucion_admin" value="{{$expediente->fecha_resolucion_admin}}">
             </div>
     
             <div class="col-md-3">
@@ -119,13 +119,13 @@
     
             <div class="col-md-6">
                 <label for="archivo" class="form-label">Archivo Adjunto</label>
-                <input type="file" class="form-control" id="archivo" name="archivo">
+                <input type="file" class="form-control form-control-sm" id="archivo" name="archivo">
                 <a target="_blank" href="{{asset('storage/expedientes/'.$expediente->archivo)}}">{{$expediente->archivo}}</a>
                 <p>Max. 20MB </p>
             </div>
     
             <div class="mb-3">
-                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="submit" class="btn btn-primary btn-sm">Guardar</button>
             </div>
         </div>
     </form>

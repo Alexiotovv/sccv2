@@ -42,7 +42,7 @@
                         @foreach ($constanciasdatos as $dc)
                             <tr>
                                 <td>{{$dc->id}}</td>
-                                <td><a href="{{route('datos.constancias.edit',$dc->id)}}" class="btn btn-warning btn-sm"><i class="fas fa-pen"></i></a></td>
+                                <td><a href="{{route('datos.constancias.edit',$dc->id)}}" class="btn btn-light btn-sm"><i class="fas fa-pen"></i></a></td>
                                 <td>{{$dc->descripcion_correlativo}}</td>
                                 <td>
                                     <a target="_blank" href="{{asset('storage/encabezados/'.$dc->archivo_encabezado)}}">{{$dc->archivo_encabezado}}</a>

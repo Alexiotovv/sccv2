@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\cronogramas;
+use App\Models\pagos;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
@@ -31,20 +32,26 @@ class CronogramasController extends Controller
     public function store(Request $request)
     {
         // try {
+            
+            $request->merge([
+                'monto_cuota' => str_replace(',', '', $request->monto_cuota),
+            ]);
 
             $validator=Validator::make($request->all(),[
                 'numero_cuotas'=>'required|integer',
                 'fecha_inicial_pago'=>'required|date',
-                'monto_pagar'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
+                'monto_cuota'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
                 'interes_aplicado'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['status'=>'required','data'=>$validator->errors()],422);
+                return response()->json(['message'=>'error','data'=>$validator->errors()],422);
             }
 
 
-            // $existe_cronograma= cronogramas::find(request('id_expediente'));
+
+            //convertir a decimales el numnero que recibe 12,151222,.00
+            //para que recien guarde
 
             // if (!$existe_cronograma) {
                 $cronograma = new cronogramas();
@@ -52,11 +59,11 @@ class CronogramasController extends Controller
                 $cronograma->id_expedientes=request('id_expediente');
                 $cronograma->numero_cuotas=request('numero_cuotas');
                 $cronograma->fecha_inicial_pago=request('fecha_inicial_pago');
-                $cronograma->monto_pagar=request('monto_pagar');
+                $cronograma->monto_pagar=request('monto_cuota');
                 $cronograma->interes_aplicado=request('interes_aplicado');
                 $cronograma->save();
                 
-                return response()->json(['status'=>'success','message'=>'Registro Correcto'], 200);
+                return response()->json(['message'=>'success','data'=>'Cronograma Agregado'], 200);
             // }else{
             //     return response()->json(['status'=>'error','message'=>'No se puede registrar otro cronograma para un expediente'], 200);
             // }
@@ -79,6 +86,7 @@ class CronogramasController extends Controller
         'deudores.apellidos_rep',
         'expedientes.concepto',
         'expedientes.expediente',
+        'expedientes.monto',
         'direcciones.nombre as entidad_sancionadora',
         )
         ->where('expedientes.id','=',$expediente_id)
@@ -108,7 +116,7 @@ class CronogramasController extends Controller
             $validator=Validator::make($request->all(),[
                 'numero_cuotas'=>'required|integer',
                 'fecha_inicial_pago'=>'required|date',
-                'monto_pagar'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
+                'monto_cuota'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
                 'interes_aplicado'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
             ]);
             if ($validator->fails()) {
@@ -120,7 +128,7 @@ class CronogramasController extends Controller
             $cronograma->id_user=auth()->user()->id; 
             $cronograma->numero_cuotas=request('numero_cuotas');
             $cronograma->fecha_inicial_pago=request('fecha_inicial_pago');
-            $cronograma->monto_pagar=request('monto_pagar');
+            $cronograma->monto_pagar=request('monto_cuota');
             $cronograma->interes_aplicado=request('interes_aplicado');
             $cronograma->save();
             return response()->json(['status'=>'success','message'=>'Registro Actualizado'], 200);
@@ -134,8 +142,18 @@ class CronogramasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(cronogramas $cronogramas)
+    public function destroy($id_cronograma)
     {
-        //
+        $pagos=pagos::where('id_cronograma',$id_cronograma)->first();
+
+        if ($pagos) {
+            return response()->json(['status'=>'error','data'=>'No es posible eliminar el cronograma, contiene pagos'], 422);
+        }else{
+            $cronograma=cronogramas::findOrFail($id_cronograma);
+            $cronograma->delete();
+            return response()->json(['status'=>'success','data'=>'Registro Eliminado'], 200);
+        }
+
+
     }
 }

@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\deudores;
+use App\Models\expedientes;
+use App\Models\cronogramas;
+use App\Models\pagos;
 use App\Models\tipo_personas;
 use App\Models\provincias;
 use App\Models\distritos;
+use App\Models\vregistrals;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
@@ -331,10 +335,30 @@ class DeudoresController extends Controller
     public function destroy(Request $request)
     {
         $id=request('id_deudor');
+
+        $datos_en_expedientes=expedientes::where('id_deudores',$id)->first();
+
+        if ($datos_en_expedientes){
+            return redirect()->route('index.ejecutado')->with('mensaje','El registro no se puede eliminar, contiene datos!')->with('color','danger');
+        }
+
+
         $deudor = deudores::findOrFail($id);
         $deudor->delete();
         
-        return redirect()->route('index.ejecutado')->with('mensaje','Registro Eliminado!');
+        return redirect()->route('index.ejecutado')->with('mensaje','Registro Eliminado!')->with('color','success');
 
     }
+
+    public function ficha($id){
+        $deudor= deudores::find($id);
+        $expediente=expedientes::where('id_deudores',$id)->get();
+        $cronogramas = cronogramas::whereIn('id_expedientes', $expediente->pluck('id'))->get();
+        $pagos = pagos::whereIn('id_cronograma',$cronogramas->pluck('id'))->get();
+        $vregistral=vregistrals::whereIn('id_expedientes',$expediente->pluck('id'))->get();
+        return view('ejecutados.ficha',compact('deudor','expediente','cronogramas','pagos','vregistral'));
+    }
+
+
+
 }

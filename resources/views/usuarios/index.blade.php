@@ -95,7 +95,7 @@
 
 @endsection
 
-@section('script')
+@section('js')
     <script>
         
     </script>
