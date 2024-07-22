@@ -46,6 +46,9 @@ class PagosController extends Controller
 
 
     public function store(Request $request){
+
+
+
         $validator=Validator::make($request->all(),[
             'id_cronograma'=>'required|integer',
             //id_user del backend
@@ -59,6 +62,13 @@ class PagosController extends Controller
             return response()->json(['status'=>'required','message'=>$validator->errors()],422);
         }
         
+        $cant_cuotas = cronogramas::where('id', request('id_cronograma'))->value('numero_cuotas');
+        $cant_pagos = pagos::where('id_cronograma',request('id_cronograma'))->count();
+
+        if ($cant_pagos>=$cant_cuotas) {
+            return response()->json(['status'=>'required','message'=>'No se puede registrar un pago adicional'],422);
+        }
+
         $date = Carbon::now();
         $pago = new pagos();
         $pago->id_cronograma=request('id_cronograma');

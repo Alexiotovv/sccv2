@@ -524,7 +524,16 @@
                 success: function (response) {
                     llenaDataTablePagos(id_cronograma);
                     llenarDataTableCronograma($("#id_expediente").val())
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let response = xhr.responseJSON;
+                        alert(response.message); // Muestra el mensaje de error
+                    } else {
+                        alert('Error inesperado: ' + xhr.statusText);
+                    }
                 }
+
             });
         }
 
