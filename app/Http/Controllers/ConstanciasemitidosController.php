@@ -18,8 +18,11 @@ class ConstanciasemitidosController extends Controller
         $datos_constancias=constanciasdatos::all()->first();
         $constancias_emitidos=DB::table('constanciasemitidos')
         ->leftjoin('expedientes','expedientes.id','=','constanciasemitidos.idExpediente')
+        ->leftjoin('deudores','deudores.id','=','expedientes.id_deudores')
         ->select(
             'constanciasemitidos.id',
+            'deudores.ruc',
+            'deudores.dni',
             'constanciasemitidos.numero_carta',
             'expedientes.expediente as numero_expediente',
             'expedientes.monto',

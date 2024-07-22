@@ -91,6 +91,7 @@
                             <tr>
                                 <th>Id</th>
                                 <th>Accion</th>
+                                <th>DNI/RUC</th>
                                 <th>N° Carta</th>
                                 <th>N° Expediente</th>
                                 <th>Monto</th>
@@ -103,6 +104,7 @@
                                 <tr>
                                     <td>{{$ce->id}}</td>
                                     <td><a href="{{route('imprimir.constancias',$ce->id)}}" class="btn btn-light btn-sm"><i class="fas fa-print"></i></a></td>
+                                    <td>{{$ce->dni}}/{{$ce->ruc}}</td>
                                     <td>{{$ce->numero_carta}}</td>
                                     <td>{{$ce->numero_expediente}}</td>
                                     <td>{{$ce->monto}}</td>
