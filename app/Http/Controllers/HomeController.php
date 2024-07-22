@@ -17,7 +17,7 @@ class HomeController extends Controller
     }
 
     public function datos(){
-        $pagos = DB::select('CALL sp_pagos_mensuales()');
+        $pagos = DB::select('CALL sp_scc_pagos()');
         $aperturados=expedientes::where('noaperturado',0)->count();
         $noaperturados=expedientes::where('noaperturado',1)->count();
         $totalexpedientes=expedientes::all()->count();
