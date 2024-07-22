@@ -21,7 +21,7 @@
   <!-- [Favicon] icon -->
   <link rel="icon" href="../../../assets/images/favicon.svg" type="image/x-icon" />
  <!-- [Google Font : Public Sans] icon -->
-<link href="../fonts.googleapis.com/css23da63da6.css?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+{{-- <link href="../fonts.googleapis.com/css23da63da6.css?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"> --}}
 
 <!-- [Tabler Icons] https://tablericons.com -->
 <link rel="stylesheet" href="../../../assets/fonts/tabler-icons.min.css" >
@@ -131,7 +131,7 @@
   <script>
 
   
-  <script>preset_change("preset-1");</script>
+  
    <div class="offcanvas border-0 pct-offcanvas offcanvas-end" tabindex="-1" id="offcanvas_pc_layout">
   <div class="offcanvas-header justify-content-between">
     <h5 class="offcanvas-title">Settings</h5>
