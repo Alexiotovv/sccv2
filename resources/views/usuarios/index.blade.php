@@ -96,9 +96,8 @@
 @endsection
 
 @section('js')
-    <script>
-        
-    </script>
+<script src="../../../assets/js/plugins/jquery.dataTables.min.js"></script>
+<script src="../../../assets/js/plugins/dataTables.bootstrap4.min.js"></script>
     <script>
          $(document).ready(function() {
         $('#dtUsuarios').DataTable();
