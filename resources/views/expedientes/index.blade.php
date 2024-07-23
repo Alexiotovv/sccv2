@@ -156,8 +156,6 @@
                         </table>
                     </div>
                       <hr>
-                      
-
 
                 </div>
                 <div class="modal-footer">
@@ -182,29 +180,52 @@
             <div class="modal-body">
                     <form id="formCronograma" enctype="multipart/form-data">@csrf
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="monto_deuda">Monto Deuda</label>
                                 S/<input type="text" value="0.00" id="monto_deuda" name="monto_deuda" class="form-control form-control-sm" readonly>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="interes_aplicado">Interes Aplicado %</label>
-                                <input type="number" onchange="change_interes_aplicado()" onkeyup="change_interes_aplicado()" value="0.00" id="interes_aplicado" name="interes_aplicado" class="form-control form-control-sm" required>
+                                <input type="number" step="0.01" onchange="change_interes_aplicado()" onkeyup="change_interes_aplicado()" value="0.00" id="interes_aplicado" name="interes_aplicado" class="form-control form-control-sm" required>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <input type="text" name="id_expediente" id="id_expediente" hidden>
                                 <label for="numero_cuotas">Número de Cuotas</label>
                                 <input type="number" name="numero_cuotas" onchange="change_numero_cuotas()" onkeyup="change_numero_cuotas()" id="numero_cuotas" value="1" class="form-control form-control-sm" required>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label for="monto_cuota">Monto de Cuota</label>
-                                <input type="text" step="0.01" name="monto_cuota" id="monto_cuota" value="0" class="form-control form-control-sm" required readonly>
+                                <input type="text" step="0.01" name="monto_cuota" onchange="change_monto_cuota()" onkeyup="change_monto_cuota()"  id="monto_cuota" value="0" class="form-control form-control-sm" required>
                             </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <label for="fecha_inicial_pago">Fecha Inicial de Pago</label>
                             <input type="date" name="fecha_inicial_pago" id="fecha_inicial_pago" class="form-control form-control-sm" required>
                         </div>
+                        <div class="col-md-3">
+                            <label for="fecha_inicial_pago">Total a Pagar</label>
+                            <input type="text" name="total_pagar" id="total_pagar" class="form-control form-control-sm" required readonly>
                         </div>
+                        <div class="row">
+                            <div class="col-md-3" >
+                                <label for="chkDescuento">Aplicar Dscto</label>
+                                <br>
+                                <input type="checkbox" onclick="aplicar_dscto()" step="0.00" id="chkDescuento" name="chkDescuento" class="form-check-input">
+                            </div>
+                            <div class="row" hidden id="rowAplicarDescuento">
+                                <div class="col-md-3" >
+                                    <label for="monto_deuda_dscto">Monto Deuda(Dscto)</label>
+                                    <input type="text" step="0.00" name="monto_deuda_dscto" onkeyup="change_monto_deuda_dscto()" id="monto_deuda_dscto" class="form-control form-control-sm" value="0.00">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="ordenanzadscto">Ordenanza de Dscto</label>
+                                    <input type="file" class="form-control form-control-sm" name="ordenanzadscto">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
 
                         <div class="content" style="text-align: center">
                             <br>
@@ -422,14 +443,20 @@
                 dataType: "json",
                 success: function (response) {
                     $("#dtCronograma tbody").html("");
-
                     if (response.length==0) {
                         $("#btnCrearCronograma").show();
                     }else{
                         $("#btnCrearCronograma").hide();
                     }
                     response.forEach(element => {
-                        let estadoTexto = element.estado ? '<p style="color:green">CANCELADO</p>' : '<p style="color:red">PENDIENTE</p>';
+                        let estadoTexto = '';
+                        if (element.estado==1) {
+                            estadoTexto ='<p style="color:green">CANCELADO</p>';
+                        }else if (element.estado==0) {
+                            estadoTexto ='<p style="color:red">PENDIENTE</p>'
+                        }else if (element.estado==2) {
+                            estadoTexto ='<p style="color:red">CERRADO</p>'
+                        }
                         
                         $("#dtCronograma tbody").append(
                         "<tr>"+
@@ -496,13 +523,14 @@
                     llenarDataTableCronograma(id);
                     $("#modalCrearCronograma").modal('hide');
                 },
-                error: function(xhr) {
+                error: function(xhr,status,error) {
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.data;
                         let errorMessages = Object.values(errors).map(errArray => errArray.join(' ')).join('\n');
                         alert('Errores:\n' + errorMessages);
                     } else {
-                        alert('Error inesperado.');
+                            
+                            alert('Error inesperado: ' + xhr.statusText);
                     }
                 }
             });
@@ -758,38 +786,88 @@
     
     <script>
         function calcularPago() {
-            let monto_deuda = $("#monto_deuda").val()
+            let _chkdescuento=$("#chkDescuento");
+            var monto_deuda="";
+            if (_chkdescuento.is(':checked')) {
+                monto_deuda=$("#monto_deuda_dscto").val()
+            }else{
+                monto_deuda=$("#monto_deuda").val()
+
+            }
+
+
             let interes_aplicado = $("#interes_aplicado").val();
             let numero_cuotas = $("#numero_cuotas").val().trim();
-
             monto_deuda=monto_deuda.replace(/,/g, '');
             let monto_interes = parseFloat(monto_deuda) * (parseFloat(interes_aplicado/100)+1)
-            
             let subtotal = monto_interes / parseFloat(numero_cuotas);
+            
+            let total_pagar = (parseFloat(numero_cuotas)*parseFloat(subtotal))
+            
+            total_pagar = total_pagar.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            $("#total_pagar").val(total_pagar);
 
             let monto_cuota = subtotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
             
-            $("#monto_cuota").val(monto_cuota)
-
+            $("#monto_cuota").val(monto_cuota);
+            
         }
+  
+    </script>
 
+    <script>
         function change_interes_aplicado() {
             calcularPago()
         }
-        
-    </script>
-    <script>
         function change_numero_cuotas() {
             calcularPago()
         }
-    </script>
 
+        function change_monto_deuda_dscto() {
+            calcularPago()
+        }
+    
+    </script>
+    <script>
+
+        var _state_dscto=false;
+        
+        function aplicar_dscto() {
+            let _chkdescuento=$("#chkDescuento");
+
+            _chkdescuento.change(function () { 
+                if (_chkdescuento.is(':checked')) {
+                    $("#rowAplicarDescuento").attr('hidden',false)
+                    $("#numero_cuotas").val(1)
+                    $("#interes_aplicado").val(0)
+                    $("#monto_cuota").val($("#monto_deuda").val());
+                    $("#monto_deuda_dscto").val($("#monto_deuda").val());
+                    
+                    const input = $('#monto_deuda_dscto');
+                    input.focus().select();
+
+                    calcularPago();
+
+                }else{
+                    $("#rowAplicarDescuento").attr('hidden',true);
+                    $("#interes_aplicado").val(0);
+                    $("#monto_deuda_dscto").val(0);
+                    $("#numero_cuotas").val(1)
+                    calcularPago();
+                }
+            })
+            
+        }
+    </script>
     <script>
         $(document).ready(function() {
             let today = new Date();
             let nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
             let formattedDate = nextMonth.toISOString().split('T')[0];
             $('#fecha_inicial_pago').val(formattedDate);
+
+            
+            calcularPago();
         });
     </script>
 @endsection

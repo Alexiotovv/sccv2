@@ -52,7 +52,7 @@ class PagosController extends Controller
         $validator=Validator::make($request->all(),[
             'id_cronograma'=>'required|integer',
             //id_user del backend
-            'monto'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
+            'monto'=>'required|numeric',
             'metodo'=>'required|string',
             'estado'=>'required|int',
             //fecha del backend

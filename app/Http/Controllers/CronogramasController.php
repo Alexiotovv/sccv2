@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\cronogramas;
+use App\Models\expedientes;
 use App\Models\pagos;
 use Illuminate\Http\Request;
 use Validator;
@@ -36,22 +37,46 @@ class CronogramasController extends Controller
             $request->merge([
                 'monto_cuota' => str_replace(',', '', $request->monto_cuota),
             ]);
+            
+            $descuento=request('chkDescuento');
+            if ($descuento=='on') {
+                $validator=Validator::make($request->all(),[
+                    'id_expediente'=>'required',
+                    'numero_cuotas'=>'required|integer',
+                    'fecha_inicial_pago'=>'required|date',
+                    'monto_cuota'=>'required|numeric',
+                    'interes_aplicado'=>'required|numeric',
+                    'monto_deuda_dscto'=>'required'
+                ]);    
+            }else{
+                $validator=Validator::make($request->all(),[
+                    'id_expediente'=>'required',
+                    'numero_cuotas'=>'required|integer',
+                    'fecha_inicial_pago'=>'required|date',
+                    'monto_cuota'=>'required|numeric',
+                    'interes_aplicado'=>'required|numeric',
+                ]);
+            }
 
             $validator=Validator::make($request->all(),[
+                'id_expediente'=>'required',
                 'numero_cuotas'=>'required|integer',
                 'fecha_inicial_pago'=>'required|date',
-                'monto_cuota'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
-                'interes_aplicado'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
+                'monto_cuota'=>'required|numeric',
+                'interes_aplicado'=>'required|numeric',
             ]);
-
+            
             if ($validator->fails()) {
                 return response()->json(['message'=>'error','data'=>$validator->errors()],422);
             }
+            
+            $estado_cronograma=cronogramas::where('id_expedientes',request('id_expediente'))->value('estado');
 
+            // if ($estado_cronograma==0 || $estado_cronograma==1) {
+            //     return response()->json(['message'=>'Accion previa','data'=>'No se puede registrar un cronograma si existre un PENDIENTE o CANCELADO,
+            //     cierre primero el cronograma anterior','status'=>'required'], 409);
+            // }
 
-
-            //convertir a decimales el numnero que recibe 12,151222,.00
-            //para que recien guarde
 
             // if (!$existe_cronograma) {
                 $cronograma = new cronogramas();
@@ -63,6 +88,20 @@ class CronogramasController extends Controller
                 $cronograma->interes_aplicado=request('interes_aplicado');
                 $cronograma->save();
                 
+                if ($descuento=='on'){
+                    $exp_update=expedientes::findOrFail(request('id_expediente'));
+                    $exp_update->monto_dscto=request('monto_deuda_dscto');
+                    if ($request->hasFile('ordenanzadscto')){
+                        $file = request('ordenanzadscto')->getClientOriginalName();//archivo recibido
+                        $filename = pathinfo($file, PATHINFO_FILENAME);//nombre archivo sin extension
+                        $extension = request('ordenanzadscto')->getClientOriginalExtension();//extensión
+                        $archivo= $filename.'_'.time().'.'.$extension;//
+                        request('ordenanzadscto')->storeAs('ordenanzadscto/',$archivo,'public');//refiere carpeta publica es el nombre de disco
+                        $exp_update->ordenanzadscto = $archivo;
+                    }
+                    $exp_update->save();
+                }
+
                 return response()->json(['message'=>'success','data'=>'Cronograma Agregado'], 200);
             // }else{
             //     return response()->json(['status'=>'error','message'=>'No se puede registrar otro cronograma para un expediente'], 200);
@@ -116,8 +155,8 @@ class CronogramasController extends Controller
             $validator=Validator::make($request->all(),[
                 'numero_cuotas'=>'required|integer',
                 'fecha_inicial_pago'=>'required|date',
-                'monto_cuota'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
-                'interes_aplicado'=>'required|numeric|regex:/^\d{1,10}(\.\d{1,2})?$/',
+                'monto_cuota'=>'required|numeric',
+                'interes_aplicado'=>'required|numeric',
             ]);
             if ($validator->fails()) {
                 return response()->json(['status'=>'required','message'=>$validator->errors()],422);
