@@ -1,15 +1,20 @@
 @extends('bases.base')
 @section('css')
-#total_pagado {
+<style>
+    #total_pagado {
     display: inline;
   }
   
   strong {
     display: inline;
   }
+</style>
+    
   
 @endsection
 @section('content')
+
+
 <div class="card">
     <div class="card-body">
         @if(session()->has('mensaje'))
@@ -30,7 +35,14 @@
 
         
     <h5>Lista de Expedientes</h5>
-    <a href="{{route('create.expediente')}}" class="btn btn-primary btn-sm">Nuevo Expediente</a>
+    <div class="row">
+        <div class="col-md-6">
+            <a href="{{route('create.expediente')}}" class="btn btn-primary btn-sm">Nuevo Expediente</a>
+        </div>
+        <div class="col-md-6" style="text-align: right">
+            <a class="btn btn-primary btn-sm" onclick="modalCorrelativo()">Correlativo</a>
+        </div>
+    </div>
     <br>
     <br>
     <div class="table-responsive">
@@ -393,8 +405,12 @@
         </div>
     </div>
 </div>
-
+{{-- Modal Confirmar Eliminar --}}
 @include('modals.confirmar_eliminar')
+
+{{-- Modal Correlativo --}}
+@include('expedientes.correlativo')
+
 
 @endsection
 
@@ -869,5 +885,34 @@
             
             calcularPago();
         });
+
+        function modalCorrelativo() { 
+            $.ajax({
+                type: "get",
+                url: "/expedientes/show/correlativo",
+                dataType: "json",
+                success: function (response) {
+                    $("#numero_expediente").val(response.data.numero)
+                    $("#ano_expediente").val(response.data.ano)
+                    $("#desc_expediente").val(response.data.descripcion)
+                    $("#modalCorrelativo").modal('show');
+
+                }
+            });
+        }
+
+        $("#btnGuardarCorrelativo").on("click",function (e) { 
+            ds=$("#formCorrelativo").serialize()
+            $.ajax({
+                type: "POST",
+                url: "/expedientes/update/correlativo",
+                data: ds,
+                dataType: "json",
+                success: function (response) {
+                    alert(response.message)
+                    $("#modalCorrelativo").modal('hide');
+                }
+            });
+         })
     </script>
 @endsection

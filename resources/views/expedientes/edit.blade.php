@@ -118,9 +118,18 @@
             </div>
     
             <div class="col-md-6">
-                <label for="archivo" class="form-label">Archivo Adjunto</label>
+                <label for="archivo" class="form-label">Expediente Escaneado</label>
                 <input type="file" class="form-control form-control-sm" id="archivo" name="archivo">
-                <a target="_blank" href="{{asset('storage/expedientes/'.$expediente->archivo)}}">{{$expediente->archivo}}</a>
+                
+                @if ($expediente->archivo)
+                <div class="row"  id="archivo_escaneado">
+                    <a target="_blank" href="{{asset('storage/expedientes/'.$expediente->archivo)}}">
+                            {{$expediente->archivo}}
+                    </a>
+                    <a onclick="fnEliminarExpedienteEscaneado({{$expediente->id}})"><i class="fas fa-trash-alt"></i></a>
+
+                </div>
+                @endif
                 <p>Max. 20MB </p>
             </div>
     
@@ -133,37 +142,37 @@
     </div>
 </div>
 
+@include('messages.confirmacion_eliminar')
+
 @endsection
 
 @section('js')
     <script>
-        // function btnBuscarEjecutado() { 
-        //     var doc=$("#doc").val();
-        //     $.ajax({
-        //         type: "GET",
-        //         url: "/ejecutado/show/"+doc,
-        //         dataType: "json",
-        //         success: function (response) {
-                    
-        //             if (response.message) {
-        //                 console.log("entro a messaage")
-        //                 $("#MensajeBusqueda").text("No se encontró el documento, intente nuevamente");
-        //                 $("#MensajeBusqueda").prop('hidden',false);
-        //                 $("#nombre").val("");
-        //                 $("#apellidos").val("");
-        //                 $("#direccion").val("");
-        //             }else{
-        //                 $("#MensajeBusqueda").text("");
-        //                 $("#MensajeBusqueda").prop('hidden',true);
-        //                 $("#id_deudor").val(response.data.id);
-        //                 $("#nombre").val(response.data.nombre);
-        //                 $("#apellidos").val(response.data.apellidos);
-        //                 $("#direccion").val(response.data.domicilio);
-        //             }
+        function fnEliminarExpedienteEscaneado(id) {
+            $("#id_registro_eliminar").val(id);
+            $("#modalConfirmarEliminar").modal('show');
+        }
 
-                
-        //         }
-        //     });
-        //  }
+        $("#btnSiEliminar").on("click",function (e) { 
+            var id=$("#id_registro_eliminar").val();
+               $.ajax({
+                   type: "GET",
+                   url: "/expedientes/destroy/"+id,
+                   dataType: "json",
+                   success: function (response) {
+                        $("#archivo_escaneado").attr('hidden', 'true');
+                        $("#modalConfirmarEliminar").modal('hide');
+                        alert(response.message)
+                    
+                    //    else{
+                    //         alert(response.message)
+                    //         $("#modalConfirmarEliminar").modal('hide');
+                    //    }
+   
+                   
+                   }
+               });
+        });
+
     </script>
 @endsection

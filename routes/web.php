@@ -72,6 +72,10 @@ Route::post('/expedientes/store/', [ExpedientesController::class,'store'])->midd
 Route::get('/expedientes/buscar/{numero}', [ExpedientesController::class,'show'])->middleware(['auth'])->name('buscar.expediente');;
 Route::post('/expedientes/update', [ExpedientesController::class,'update'])->middleware(['auth'])->name('update.expediente');;
 Route::get('/expedientes/buscar/doc/{dniruc}', [ExpedientesController::class,'buscar_doc'])->middleware(['auth'])->name('buscar.expediente.dniruc');;
+Route::get('/expedientes/destroy/{id}', [ExpedientesController::class,'destroy'])->middleware(['auth'])->name('destroy.expediente');
+Route::get('/expedientes/show/correlativo', [ExpedientesController::class,'show_correlativo'])->middleware(['auth'])->name('show.correlativo');
+Route::post('/expedientes/update/correlativo', [ExpedientesController::class,'update_correlativo'])->middleware(['auth'])->name('update.correlativo');
+
 //Cronogramas
 Route::get('/cronogramas/index/{expediente_id}', [CronogramasController::class,'index'])->middleware(['auth'])->name('index.cronograma');
 Route::post('/cronogramas/store/', [CronogramasController::class,'store'])->name('store.cronograma');

@@ -5,7 +5,7 @@
   
 <!-- Mirrored from html.phoenixcoded.net/light-able/bootstrap/widget/w_data.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 07 May 2024 15:07:39 GMT -->
 <head>
-    <title>Dashboard</title>
+    <title>Dashboard | SCC</title>
     <!-- [Meta] -->
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui" />
@@ -61,7 +61,7 @@
       <nav class="pc-sidebar">
         <div class="navbar-wrapper">
           <div class="m-header">
-            <a href="https://html.phoenixcoded.net/light-able/bootstrap/dashboard/index.html" class="b-brand text-primary">
+            {{-- <a href="https://html.phoenixcoded.net/light-able/bootstrap/dashboard/index.html" class="b-brand text-primary"> --}}
               <!-- ========   Change your logo from here   ============ -->
               {{-- <img src="../../../assets/images/logo-dark.svg" alt="logo image" class="logo-lg" /> --}}
               

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\expedientes;
+use App\Models\numeroexpediente;
 use App\Models\direcciones;
 use App\Models\deudores;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
+use Illuminate\Support\Facades\Storage;
+
 class ExpedientesController extends Controller
 {
     
@@ -64,7 +67,7 @@ class ExpedientesController extends Controller
 
     public function index()
     {
-        
+
         $expedientes=DB::table('expedientes')
         ->leftjoin('deudores','deudores.id','=','expedientes.id_deudores')
         ->leftjoin('direcciones','direcciones.id','=','expedientes.id_direcciones')
@@ -117,7 +120,7 @@ class ExpedientesController extends Controller
             'id_deudor' => 'required|integer',
             'concepto' => 'required|string|max:250',
             'monto' => 'required|numeric',
-            'expediente' => 'required|string|max:250',
+            // 'expediente' => 'required|string|max:250',
             'fecha' => 'required|date',
             'uit' => 'required|numeric',
             // 'importe' => 'required|numeric',
@@ -128,7 +131,7 @@ class ExpedientesController extends Controller
             'id_deudor.required' => 'El campo deudor es obligatorio.',
             'concepto.required' => 'El campo concepto es obligatorio.',
             'monto.required' => 'El campo monto es obligatorio.',
-            'expediente.required' => 'El campo expediente es obligatorio.',
+            // 'expediente.required' => 'El campo expediente es obligatorio.',
             'expediente.max' => 'El campo expediente no debe exceder los 250 caracteres.',
             'fecha.date' => 'El campo fecha debe ser una fecha válida.',
             // 'importe.required' => 'El campo importe es obligatorio.',
@@ -150,7 +153,7 @@ class ExpedientesController extends Controller
         $obj->id_direcciones=request('oficina');
         $obj->concepto=request('concepto');
         $obj->monto=request('monto');
-        $obj->expediente=request('expediente');
+        // $obj->expediente=request('expediente');
         $obj->fecha=request('fecha');
         $obj->uit=request('uit');
         $obj->importe=0.00;
@@ -168,7 +171,19 @@ class ExpedientesController extends Controller
             $obj->archivo = $archivo;
         }
 
+        
+        $numero = numeroexpediente::value('numero_expediente');
+        $ano = numeroexpediente::value('ano_expediente');
+        $desc = numeroexpediente::value('desc_expediente');
+        $numero= $numero + 1;
+        $numero_formateado = str_pad($numero, 3, '0', STR_PAD_LEFT);
+        $numero_exp_guardar = $numero_formateado."-".$ano."-".$desc;
+        
+        $obj->expediente=$numero_exp_guardar;
         $obj->save();
+
+        numeroexpediente::query()->update(['numero_expediente' => $numero]);
+
 
         return redirect()->route('index.expedientes')->with('mensaje','Expediente Creado!');
     }
@@ -259,7 +274,7 @@ class ExpedientesController extends Controller
         $rules = [
             'concepto' => 'required|string|max:250',
             'monto' => 'required|numeric',
-            'expediente' => 'required|string|max:250',
+            // 'expediente' => 'required|string|max:250',
             'fecha' => 'required|date',
             'uit' => 'required|numeric',
             // 'importe' => 'required|numeric',
@@ -271,7 +286,7 @@ class ExpedientesController extends Controller
             'concepto.required' => 'El campo concepto es obligatorio.',
             'monto.required' => 'El campo monto es obligatorio.',
             'expediente.required' => 'El campo expediente es obligatorio.',
-            'expediente.max' => 'El campo expediente no debe exceder los 250 caracteres.',
+            // 'expediente.max' => 'El campo expediente no debe exceder los 250 caracteres.',
             'fecha.date' => 'El campo fecha debe ser una fecha válida.',
             // 'importe.required' => 'El campo importe es obligatorio.',
             // 'importe.numeric' => 'El campo importe debe ser un número.',
@@ -290,7 +305,7 @@ class ExpedientesController extends Controller
         $obj->id_direcciones=request('oficina');
         $obj->concepto=request('concepto');
         $obj->monto=request('monto');
-        $obj->expediente=request('expediente');
+        // $obj->expediente=request('expediente');
         $obj->fecha=request('fecha');
         $obj->uit=request('uit');
         $obj->importe=0.00;
@@ -343,9 +358,66 @@ class ExpedientesController extends Controller
 
     }
 
-    public function destroy(coactivos $coactivos)
+    public function destroy($id)
     {
-        //
+        try {
+            $expediente=expedientes::find($id);
+            $nombre_archivo=$expediente->archivo;
+            $ruta = 'expedientes/'.$nombre_archivo;
+
+            // if (Storage::exists($ruta)) {
+            Storage::disk('public')->delete($ruta);
+
+
+            $expediente->archivo='';
+            $expediente->save();
+            return response()->json(['message'=>'Expediente escaneado eliminado','status'=>'success'], 200,);
+            // }else{
+            //     return response()->json(['message'=>'Ruta o archivo no existe','status'=>'success'], 200,);
+            // }
+
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>$th,'status'=>'error'], 200,);
+        }
+
+    }
+
+
+    public function show_correlativo(Request $request){
+        $numeroexpediente= numeroexpediente::first();
+        
+        if (!$numeroexpediente) {
+            $numero=0;
+            $ano=0;
+            $descripcion='';
+        }else{
+            $numero=$numeroexpediente->numero_expediente;
+            $ano=$numeroexpediente->ano_expediente;
+            $descripcion=$numeroexpediente->desc_expediente;;
+        }
+
+        return response()->json(['status'=>'success','data'=>['numero'=>$numero,'ano'=>$ano,'descripcion'=>$descripcion]], 200);
+    }
+
+    public function update_correlativo(Request $request){
+        $numero = request('numero_expediente');
+        $ano = request('ano_expediente');
+        $desc = request('desc_expediente');
+        $registro = numeroexpediente::first();
+        if ($registro) {
+            $obj = numeroexpediente::findOrFail($registro->id);
+            $obj->numero_expediente=$numero;
+            $obj->ano_expediente=$ano;
+            $obj->desc_expediente=$desc;
+            $obj->save();
+        } else {
+            $obj = new numeroexpediente();
+            $obj->numero_expediente=$numero;
+            $obj->ano_expediente=$ano;
+            $obj->desc_expediente=$desc;
+            $obj->save();
+        }
+        return response()->json(['status'=>'success','message'=>'Correlativo Guardado'], 200);
     }
 
 

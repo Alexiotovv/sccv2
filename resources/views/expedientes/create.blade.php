@@ -77,7 +77,7 @@
     
             <div class="col-md-3">
                 <label for="expediente" class="form-label">Número de Expediente</label>
-                <input type="text" class="form-control form-control-sm" id="expediente" name="expediente" placeholder="Número de expediente" required>
+                <input type="text" class="form-control form-control-sm" id="expediente" name="expediente" placeholder="Se genera automáticamente" readonly>
             </div>
     
             <div class="col-md-3">
@@ -112,7 +112,7 @@
             </div>
     
             <div class="col-md-6">
-                <label for="archivo" class="form-label">Archivo Adjunto</label>
+                <label for="archivo" class="form-label">Expediente Escaneado</label>
                 <input type="file" class="form-control form-control-sm" id="archivo" name="archivo">
                 <p>Max. 20MB </p>
             </div>
