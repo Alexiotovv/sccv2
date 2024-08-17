@@ -759,7 +759,7 @@
 
             if (nombre_modelo=='vregistral') {
 
-                id=$("#id_registro_eliminar_vregistral").val();
+                id=$("#id_registro_eliminar").val();
                 $.ajax({
                     type: "GET",
                     url: "/vregistral/destroy/"+id,
