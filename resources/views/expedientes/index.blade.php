@@ -64,6 +64,7 @@
                     <th>Resolución Admin</th>
                     <th>Fecha Resolución Admin</th>
                     <th>Aperturado</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -94,6 +95,7 @@
                     <td>{{ $expediente->resolucion_admin }}</td>
                     <td>{{ $expediente->fecha_resolucion_admin }}</td>
                     <td>{{ $expediente->noaperturado ? 'Sí' : 'No' }}</td>
+                    <td> <a onclick="modalConfirmarEliminarExpediente('{{$expediente->id}}')" class="btn btn-light btn-sm" data-bs-toggle="tooltip" title="eliminar expediente"><i class="fas fa-trash-alt"></i></a></td>
                 </tr>
                 @endforeach
             </tbody>
@@ -411,11 +413,38 @@
 {{-- Modal Correlativo --}}
 @include('expedientes.correlativo')
 
+@include('messages.confirmar_eliminar_expediente')
 
 @endsection
 
 @section('js')
     <script>
+
+        function btnEliminarExpediente() {
+            $.ajax({
+                type: "GET",
+                url: "/expedientes/destroy/registro/"+$("#id_registro_eliminar_expediente").val(),
+                dataType: "json",
+                success: function (response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                if (xhr.status === 409) {
+                    alert(xhr.responseJSON.message); // Muestra directamente el mensaje de error enviado desde el servidor
+                } else {
+                    alert('Error inesperado: ' + xhr.statusText);
+                }
+            }
+
+            });
+        }
+        
+        function modalConfirmarEliminarExpediente(id) {
+            $("#modalConfirmarEliminarExpediente").modal("show");
+            $("#id_registro_eliminar_expediente").val(id);
+        }
+
         function cronograma(id) { 
             $("#id_expediente").val(id)
             $("#modalCronograma").modal('show');
@@ -730,7 +759,7 @@
 
             if (nombre_modelo=='vregistral') {
 
-                id=$("#id_registro_eliminar").val();
+                id=$("#id_registro_eliminar_vregistral").val();
                 $.ajax({
                     type: "GET",
                     url: "/vregistral/destroy/"+id,

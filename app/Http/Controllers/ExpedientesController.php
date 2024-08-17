@@ -6,6 +6,8 @@ use App\Models\expedientes;
 use App\Models\numeroexpediente;
 use App\Models\direcciones;
 use App\Models\deudores;
+use App\Models\vregistrals;
+use App\Models\cronogramas;
 use Illuminate\Http\Request;
 use Validator;
 use DB;
@@ -356,6 +358,29 @@ class ExpedientesController extends Controller
         }
 
 
+    }
+
+    public function destroy_registro($id){
+
+        $cronogramas = cronogramas::where('id_expedientes',$id)->exists();
+        $vregistrals = vregistrals::where('id_expedientes',$id)->exists();
+        if ($cronogramas) {
+            return response()->json(['message'=>'No se puede eliminar, contiene cronogramas','status'=>'conflict'], 409);
+        }
+        if ($vregistrals) {
+            return response()->json(['message'=>'No se puede eliminar, contiene verificacion registral','status'=>'conflict'], 409);
+        }
+
+        $expediente=expedientes::findOrFail($id);
+        $nombre_archivo=$expediente->archivo;
+        $expediente->delete();
+
+        if ($nombre_archivo!=='') {
+            $ruta = 'expedientes/'.$nombre_archivo;
+            Storage::disk('public')->delete($ruta);
+        }
+
+        return response()->json(['message'=>'Expediente eliminado','status'=>'success'], 200,);
     }
 
     public function destroy($id)

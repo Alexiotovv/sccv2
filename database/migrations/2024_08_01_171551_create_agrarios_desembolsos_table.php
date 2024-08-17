@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('agrarios_creditos_id')->unsigned();
             $table->foreign('agrarios_creditos_id')->references('id')->on('agrarios_creditos')->onDelete('cascade');
             $table->string('numero_oficio_remitido', 250)->default('');
-            $table->date('fecha');
+            $table->date('fecha_desembolso');
             $table->decimal('monto_desembolsado', 10, 2)->default(0.00);
             $table->date('fecha_carga');
             $table->date('fecha_pago');

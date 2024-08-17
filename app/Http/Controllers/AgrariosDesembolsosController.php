@@ -28,7 +28,30 @@ class AgrariosDesembolsosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $request->validate([
+                'agrarios_creditos_id' => 'required|exists:trabajadores,id',
+                'fecha_desembolso' => 'required|date',
+                'monto_desembolsado' => 'required|numeric|min:0',
+                'fecha_carga' => 'required|date',
+                'fecha_pago' => 'required|date',
+                'archivo_oficio' => 'required|string|max:250',
+            ]);
+
+            Desembolso::create($request->all());
+
+            return response()->json(['message'=>'Registro Correcto'], 200);
+            
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Errores de validación',
+                'errores' => $e->errors()
+            ], 422); // 422 Unprocessable Entity
+        }
+
+
+
     }
 
     /**

@@ -14,11 +14,13 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            'name'=>'admin',
-            'email' => 'admin@gmail.com',
-            'password' => Hash::make('#1984'),
-            'status'=>1,
+            'nombre'=>'admin',
         ]);
+        DB::table('agrarios_tipocreditos')->insert([
+            ['nombre' => 'CRÉDITO AGRARIOS'],
+            ['nombre' => 'MICROCRÉDITOS']
+        ]);
+
         DB::table('direcciones')->insert([
             'nombre'=>'OFICINA DE PRUEBA',
         ]);

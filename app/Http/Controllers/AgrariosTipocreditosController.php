@@ -12,7 +12,7 @@ class AgrariosTipocreditosController extends Controller
      */
     public function index()
     {
-        //
+       
     }
 
     /**

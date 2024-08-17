@@ -15,17 +15,10 @@ use App\Http\Controllers\VregistralsController;
 use App\Http\Controllers\ConstanciasdatosController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ConstanciasemitidosController;
+use App\Http\Controllers\AgrariosDeudoresController;
+use App\Http\Controllers\AgrariosCreditosController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
 
 Route::get('/',function(){
     return view('auth.login');
@@ -73,6 +66,7 @@ Route::get('/expedientes/buscar/{numero}', [ExpedientesController::class,'show']
 Route::post('/expedientes/update', [ExpedientesController::class,'update'])->middleware(['auth'])->name('update.expediente');;
 Route::get('/expedientes/buscar/doc/{dniruc}', [ExpedientesController::class,'buscar_doc'])->middleware(['auth'])->name('buscar.expediente.dniruc');;
 Route::get('/expedientes/destroy/{id}', [ExpedientesController::class,'destroy'])->middleware(['auth'])->name('destroy.expediente');
+Route::get('/expedientes/destroy/registro/{id}', [ExpedientesController::class,'destroy_registro'])->middleware(['auth'])->name('destroy.registro');
 Route::get('/expedientes/show/correlativo', [ExpedientesController::class,'show_correlativo'])->middleware(['auth'])->name('show.correlativo');
 Route::post('/expedientes/update/correlativo', [ExpedientesController::class,'update_correlativo'])->middleware(['auth'])->name('update.correlativo');
 
@@ -114,6 +108,28 @@ Route::get('/oficinas/index', [DireccionesController::class,'index'])->name('ind
 Route::post('/oficinas/update', [DireccionesController::class,'update'])->name('update.oficinas');
 Route::post('/oficinas/store', [DireccionesController::class,'store'])->name('store.oficinas');
 Route::post('/oficinas/destroy', [DireccionesController::class,'destroy'])->name('destroy.oficinas');
+
+
+
+//--------------------START AGRARIOS-----------------------------------
+//Desembolso
+Route::post('/agrario/desembolso/store', [AgrariosDeudoresController::class,'store'])->name('agrario.desembolso.store');
+
+//Deudores
+Route::get('/agrario/deudor/index', [AgrariosDeudoresController::class,'index'])->name('agrario.deudor.index');
+Route::get('/agrario/deudor/edit/{id}', [AgrariosDeudoresController::class,'edit'])->name('agrario.deudor.edit');
+Route::post('/agrario/deudor/store', [AgrariosDeudoresController::class,'store'])->name('agrario.deudor.store');
+Route::post('/agrario/deudor/update', [AgrariosDeudoresController::class,'update'])->name('agrario.deudor.update');
+Route::post('/agrario/deudor/destroy', [AgrariosDeudoresController::class,'destroy'])->name('agrario.deudor.destroy');
+
+//Generar Creditos
+Route::post('/agrario/credito/store', [AgrariosCreditosController::class,'store'])->name('agrario.credito.store');
+Route::get('/agrario/credito/destroy/{id_credito}', [AgrariosCreditosController::class,'destroy'])->name('agrario.credito.destroy');
+Route::get('/agrario/credito/show/{id_deudor}', [AgrariosCreditosController::class,'show'])->name('agrario.credito.show');
+
+
+
+//---------------------------END AGRARIOS------------------------------
 
 
 
