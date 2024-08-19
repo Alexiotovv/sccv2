@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('id_provincias')->unsigned();
             $table->foreign('id_provincias')->references('id')->on('provincias')->onDelete('cascade');
+            $table->bigInteger('id_regiones')->unsigned();
+            $table->foreign('id_regiones')->references('id')->on('regiones')->onDelete('cascade');
             $table->string('nombre_distrito', 250)->default('');
             $table->timestamps();
         });
