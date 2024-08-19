@@ -1,5 +1,5 @@
 INSERT INTO
-    dbscc.regiones (
+    gorel_scc.regiones (
         nombre,
         created_at,
         updated_at
