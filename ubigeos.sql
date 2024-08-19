@@ -31,7 +31,7 @@ VALUES ('Amazonas', NULL, NULL),
     ('Ucayali', NULL, NULL);
 
 INSERT INTO
-    dbscc.provincias (
+    gorel_scc.provincias (
         nombre_provincia,
         id_regiones,
         created_at,
@@ -358,7 +358,7 @@ VALUES ('Chachapoyas', 1, NULL, NULL),
 
 
 INSERT INTO
-    dbscc.distritos (
+    gorel_scc.distritos (
         nombre_distrito,
         id_provincias,
         id_regiones,
