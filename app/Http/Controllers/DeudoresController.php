@@ -170,12 +170,14 @@ class DeudoresController extends Controller
     {
         
         $deudor = deudores::where('dni', $doc)
-        ->select('id', 'nombre', 'apellidos', 'domicilio')
+        ->leftjoin('tipo_personas','tipo_personas.id','=','deudores.id_tipopersonas')
+        ->select('deudores.razon','deudores.id', 'deudores.nombre', 'deudores.apellidos', 'deudores.domicilio','tipo_personas.id as id_tipopersona')
         ->first();
     
         if (!$deudor) {
             $deudor = deudores::where('ruc', $doc)
-                ->select('id', 'nombre_rep as nombre', 'apellidos_rep as apellidos', 'domicilio')
+            ->leftjoin('tipo_personas','tipo_personas.id','=','deudores.id_tipopersonas')
+            ->select('deudores.razon','deudores.id', 'deudores.nombre', 'deudores.apellidos', 'deudores.domicilio','tipo_personas.id as id_tipopersona')
                 ->first();
         }
         

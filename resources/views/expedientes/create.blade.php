@@ -34,7 +34,11 @@
                 </div>
             </div>
             
-            
+            <div class="col-md-4">
+                <label for="nombre" class="form-label">Ejecutado</label>
+                <input type="text" class="form-control form-control-sm" id="ejecutado" name="ejecutado" readonly>
+            </div>
+
             <div class="col-md-4">
                 <label for="nombre" class="form-label">Nombre</label>
                 <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre del deudor" readonly>
@@ -149,9 +153,18 @@
                         $("#MensajeBusqueda").text("");
                         $("#MensajeBusqueda").prop('hidden',true);
                         $("#id_deudor").val(response.data.id);
-                        $("#nombre").val(response.data.nombre);
-                        $("#apellidos").val(response.data.apellidos);
-                        $("#direccion").val(response.data.domicilio);
+                        
+                        if (response.data.id_tipopersona===1) {
+                            $("#ejecutado").val(response.data.razon);
+                            $("#nombre").val(response.data.nombre);
+                            $("#apellidos").val(response.data.apellidos);
+                            $("#direccion").val(response.data.domicilio);
+                            
+                        }else{
+                            $("#ejecutado").val(response.data.razon);
+                            $("#direccion").val(response.data.domicilio);
+                        }
+
                     }
 
                 
