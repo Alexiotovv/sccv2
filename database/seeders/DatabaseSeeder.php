@@ -10,8 +10,6 @@ class DatabaseSeeder extends Seeder
     
     public function run(): void
     {
-
-
         DB::table('users')->insert([
             'name'=>'admin',
             'email'=>'admin@gmail.com',
@@ -19,6 +17,7 @@ class DatabaseSeeder extends Seeder
             'status'=>1,
             'password'=>bcrypt('#1984'),
         ]);
+        
         DB::table('agrarios_tipocreditos')->insert([
             ['nombre' => 'CRÉDITO AGRARIOS'],
             ['nombre' => 'MICROCRÉDITOS']
