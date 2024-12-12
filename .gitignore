@@ -16,6 +16,5 @@ yarn-error.log
 /.idea
 /.vscode
 docker-compose.yml
-Dockerfile
 .docker/php/php.ini
 .env_example_docker
