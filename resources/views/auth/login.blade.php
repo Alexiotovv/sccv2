@@ -78,7 +78,7 @@
               {{-- <h4 class="f-w-500 mb-1">Login with your email</h4>
               <p class="mb-3">Don't have an Account? <a href="register-v1.html" class="link-primary ms-1">Create Account</a></p> --}}
             </div>
-            <form action="{{route('login')}}" method="POST">@csrf
+            <form action="{{route('login_post')}}" method="POST">@csrf
                 <div class="mb-3">
                 <input type="email" class="form-control" name="email" id="email" placeholder="Correo">
                 </div>
