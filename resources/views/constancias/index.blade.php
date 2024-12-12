@@ -28,7 +28,7 @@
                             </div>
                             <div class="ms-3">
                                 <h6 class="mb-0 text-success">Mensaje</h6>
-                                <div>Para emitir una constancia debe registrar los datos de la carta.. <a href="{{route('datos.constancias.index')}}">Ir a registrar datos</a></div>
+                                <div>Para emitir una constancia debe registrar los datos de la carta.. <a href="/datos/constancias/index">Ir a registrar datos</a></div>
                             </div>
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
