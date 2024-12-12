@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
+// use Tymon\JWTAuth\Facades\JWTAuth;
 
 use Validator;
 use App\Models\User;
-use std\Class;
-use Iluminate\Support\Facades\Hash;
+// use Illuminate\Support\Facades\Hash;
 
 
 class AuthController extends Controller
